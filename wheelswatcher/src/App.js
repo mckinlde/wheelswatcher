@@ -5,9 +5,11 @@ import './App.css';
 function App() {
   const [selectedValue, setSelectedValue] = useState('');
 
+  const areas = ["auburn", "bham", "dothan"];
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Selected value: ${selectedValue}`);
+    alert(`Selected area: ${selectedValue}`);
   };
 
   const handleChange = (e) => {
@@ -31,12 +33,14 @@ function App() {
         </a>
         {/* Dropdown form starts here */}
         <form onSubmit={handleSubmit}>
-          <label htmlFor="dropdown">Choose an option:</label>
+          <label htmlFor="dropdown">Choose an area:</label>
           <select id="dropdown" value={selectedValue} onChange={handleChange}>
-            <option value="">-- Select an option --</option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+            <option value="">-- Select an area --</option>
+            {areas.map((area, index) => (
+              <option key={index} value={area}>
+                {area}
+              </option>
+            ))}
           </select>
           <button type="submit">Submit</button>
         </form>
