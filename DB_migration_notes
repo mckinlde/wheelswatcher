@@ -1,5 +1,7 @@
 aws is charging like $250/day for RDS, so we're gonna move the DB to local
 
+# ------------------------ setup psql on your local machine
+
 I'm using this guide to install porgresql on my mac:
 https://www.sqlshack.com/setting-up-a-postgresql-database-on-mac/
 
@@ -21,7 +23,7 @@ psql postgres
 ```
 
 ```
-CREATE ROLE newUser WITH LOGIN PASSWORD ‘password’;
+CREATE ROLE newUser WITH LOGIN PASSWORD 'password';
 ALTER ROLE newUser CREATEDB;
 ```
 ```
@@ -37,6 +39,172 @@ user – “newuser”
 password – “password”
 maintenance database – “postgres”
 
+```
+Pruned 1 symbolic links from /usr/local
+==> Caveats
+==> postgresql@15
+This formula has created a default database cluster with:
+  initdb --locale=C -E UTF-8 /usr/local/var/postgresql@15
+
+postgresql@15 is keg-only, which means it was not symlinked into /usr/local,
+because this is an alternate version of another formula.
+
+If you need to have postgresql@15 first in your PATH, run:
+  echo 'export PATH="/usr/local/opt/postgresql@15/bin:$PATH"' >> ~/.zshrc
+
+For compilers to find postgresql@15 you may need to set:
+  export LDFLAGS="-L/usr/local/opt/postgresql@15/lib"
+  export CPPFLAGS="-I/usr/local/opt/postgresql@15/include"
+
+For pkg-config to find postgresql@15 you may need to set:
+  export PKG_CONFIG_PATH="/usr/local/opt/postgresql@15/lib/pkgconfig"
+
+To start postgresql@15 now and restart at login:
+  brew services start postgresql@15
+Or, if you don't want/need a background service you can just run:
+  LC_ALL="C" /usr/local/opt/postgresql@15/bin/postgres -D /usr/local/var/postgresql@15
+douglasmckinley@Douglass-MacBook-Pro ~ % 
+```
+It looks like you have installed PostgreSQL 15 using Homebrew, and it has provided some additional instructions on how to manage it.
+
+Here’s a breakdown of what you might want to do next:
+
+1. **Add PostgreSQL 15 to your PATH**:
+   This will make sure PostgreSQL commands like `psql` and `pg_ctl` will use version 15 by default.
+   
+   Run the following command to add PostgreSQL 15 to your `PATH`:
+   
+   ```bash
+   echo 'export PATH="/usr/local/opt/postgresql@15/bin:$PATH"' >> ~/.zshrc
+   source ~/.zshrc
+   ```
+
+2. **Set environment variables for compilers**:
+   If you need to compile software that links against PostgreSQL, you may need to set the `LDFLAGS` and `CPPFLAGS` environment variables:
+   
+   ```bash
+   export LDFLAGS="-L/usr/local/opt/postgresql@15/lib"
+   export CPPFLAGS="-I/usr/local/opt/postgresql@15/include"
+   ```
+
+3. **Set the `PKG_CONFIG_PATH`**:
+   If you are using `pkg-config` to manage build dependencies, you might need to set this as well:
+   
+   ```bash
+   export PKG_CONFIG_PATH="/usr/local/opt/postgresql@15/lib/pkgconfig"
+   ```
+
+4. **Start PostgreSQL 15**:
+   To start PostgreSQL as a background service and have it restart on login, you can run:
+   
+   ```bash
+   brew services start postgresql@15
+   ```
+
+   If you prefer to run PostgreSQL manually in the foreground, you can use the following command:
+   
+   ```bash
+   LC_ALL="C" /usr/local/opt/postgresql@15/bin/postgres -D /usr/local/var/postgresql@15
+   ```
+
+5. **Creating and managing databases**:
+   Now that PostgreSQL is set up, you can create and manage databases using the `psql` command-line tool.
+
+   - To access the PostgreSQL shell:
+     ```bash
+     psql postgres
+     ```
+
+   - To create a new database:
+     ```bash
+     createdb mydatabase
+     ```
+
+Make sure to run `brew services start postgresql@15` if you want PostgreSQL to run in the background and restart automatically on reboot.
+
+Let me know if you need help with any further steps!
+
+It looks like you are trying to run the `createdb` command from within the `psql` shell, which doesn't work because `createdb` is an external command that should be run from your terminal, not from inside the PostgreSQL shell (`psql`).
+
+Here’s how to proceed:
+
+### To create a new database from the terminal:
+
+1. **Exit the `psql` shell** by typing:
+   ```sql
+   \q
+   ```
+
+2. **Run the `createdb` command** from your terminal, not inside `psql`:
+   ```bash
+   createdb mydatabase
+   ```
+
+This should create the `mydatabase` database.
+
+### Alternatively, if you're inside the `psql` shell, you can use the SQL command:
+
+1. Inside `psql`, to create a database, run:
+   ```sql
+   CREATE DATABASE mydatabase;
+   ```
+
+This is the correct SQL syntax for creating a database from within the `psql` shell.
+
+Let me know if you need further assistance!
+
+The errors you're seeing indicate that the user `newuser` does not have the necessary permissions to create tables or access the `public` schema. Specifically:
+
+1. **"Permission denied for schema public"** means that `newuser` doesn't have the right to create tables in the `public` schema.
+2. **"Relation 'public.listings' does not exist"** occurs because the `CREATE TABLE` command failed due to the permissions issue.
+
+### To fix this issue:
+
+You need to grant `newuser` the necessary permissions to create tables and access the `public` schema.
+
+#### 1. **Connect as a superuser (such as `postgres`)** and grant privileges:
+   
+   First, connect to your PostgreSQL database as a superuser (e.g., the `postgres` user or another user with sufficient privileges):
+
+   ```bash
+   psql -U postgres -d mydatabase
+   ```
+
+#### 2. **Grant `newuser` privileges** on the `public` schema:
+
+   You can grant the necessary permissions for `newuser` to create tables and access the `public` schema with the following commands:
+
+   ```sql
+   GRANT CREATE ON SCHEMA public TO newuser;
+   GRANT USAGE ON SCHEMA public TO newuser;
+   ```
+
+   If you also need `newuser` to have full control over tables in the `public` schema, you can run:
+
+   ```sql
+   ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO newuser;
+   ```
+
+#### 3. **Try running the SQL file again**:
+
+   After granting the permissions, exit from `psql` and re-run the SQL import command:
+
+   ```bash
+   psql -U newuser -d mydatabase -f ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+   ```
+
+### Additional Considerations:
+If `newuser` should be able to create databases as well (in case that might come up), you can also grant them that privilege:
+
+```sql
+ALTER ROLE newuser CREATEDB;
+```
+
+After performing these steps, `newuser` should be able to create tables and insert data into the `public` schema, and the import should proceed without permissions errors.
+
+Let me know if this works or if you encounter further issues!
+
+# ---------------------- going from EC2/RDS to Local with pg_dump
 
 To copy an SQL table from an RDS instance to your local machine, you can use a combination of the following steps, assuming you are using PostgreSQL. The general idea is to export the table from the RDS instance and then import it into your local PostgreSQL database.
 
@@ -67,17 +235,173 @@ pg_dump -h your-rds-endpoint.rds.amazonaws.com -U postgres -d yourdatabase -t yo
 
 This command will export the specified table to a file called `yourtable_dump.sql` on your local machine.
 
+### 1.a Sometimes, dumping specific parts of the database or with certain settings might help resolve issues. You can re-run pg_dump with additional flags to ensure it’s capturing the data properly.
+
+For example, you can try specifying --inserts to ensure that the SQL dump contains explicit INSERT commands for each row of data:
+
+```bash
+pg_dump -h database-1.cluster-ro-cvu2u86aui5t.us-west-2.rds.amazonaws.com -U postgres -d seattlecars -t listings --inserts -f /home/ec2-user/seattlecars_listings.sql
+```
+This will ensure the dump uses individual INSERT statements, which can sometimes avoid formatting issues during restoration.
+
 #### 2. **Transfer the dump file to your local machine (if necessary)**
 If you’re running the above command on an EC2 instance or any other remote environment, you will need to copy the dump file to your local machine using `scp` or a similar tool.
 
-Example:
+Example: (run from your local machine)
 
 ```bash
-scp ec2-user@your-ec2-public-ip:/path/to/dumpfile.sql ~/local/destination/
+scp -i /path/to/your-key.pem ec2-user@your-ec2-public-ip:/path/to/dumpfile.sql ~/local/destination/
 ```
 ```bash
-scp ec2-user@your-ec2-public-ip:/path/to/dumpfile.sql ~/local/destination/
+scp -i ~/Downloads/MyRobot.pem ec2-user@34.214.154.43:/home/ec2-user/seattlecars_listings.sql ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
 ```
+
+### File is at Desktop/wheelswatcher_documents/seattlecars_listings.sql , 1.5GB
+
+### 2.a debugging the transfer
+Verify file encoding: Make sure that the file encoding is compatible with PostgreSQL. Use UTF-8 encoding if possible. You can check and convert the encoding with the following command:
+```
+iconv -f ISO-8859-1 -t UTF-8 ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql > ~/Desktop/wheelswatcher_documents/converted_file.sql
+```
+Given that the SQL file was created using `pg_dump` and you're encountering issues with invalid commands when attempting to restore it, it suggests that there might have been some corruption during the transfer or that the file is not being correctly interpreted by `psql`. Let's try a few things to resolve this:
+
+### 2.a.1. **Ensure the file is not corrupted**
+   Before anything, let's verify if the file is intact and not corrupted during transfer. You can use a checksum (like `md5`) to compare the original file on the EC2 instance with the one on your local machine.
+
+   On the **EC2 instance**:
+   ```bash
+   md5sum /home/ec2-user/seattlecars_listings.sql
+   ```
+
+   On your **local machine**:
+   ```bash
+   md5 ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+   ```
+
+   The checksums should match. If they don't, the file got corrupted during transfer, and you'll need to transfer it again.
+
+### 2.a.2. **Check file formatting and newline characters**
+   If the file was transferred correctly, check if the SQL file contains Windows-style line endings (`\r\n`) instead of Unix-style (`\n`).
+
+   Run the following on your local machine to convert Windows-style line endings to Unix-style:
+   ```bash
+   sed -i 's/\r//' ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+   ```
+
+   This will remove any `\r` characters that could be causing issues.
+
+### 2.a.3. **Ensure correct dump format**
+   Make sure the file format is compatible with `psql` (SQL dump format). It’s possible that the file is in custom format instead of plain SQL. You can check this by running the following:
+
+   ```bash
+   file ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+   ```
+
+   If the output suggests that it's not a plain text file (it should say something like "ASCII text"), then you might have created the dump in a non-plain format. In that case, you would need to use `pg_restore` instead of `psql` to restore the dump.
+
+   For example, to restore using `pg_restore`:
+   ```bash
+   pg_restore -U newuser -d mydatabase ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+   ```
+
+### 2.a.4. **Check for special commands**
+   If the file looks like valid SQL but still causes errors, there might be `pg_dump`-specific commands that `psql` doesn't recognize, such as commands specific to PostgreSQL versions or environments. In this case, you can clean up the SQL file by removing any `pg_dump`-specific commands (like comments or meta commands).
+
+   You can try running this simple command to clean up unwanted lines:
+
+   ```bash
+   sed -i '/^\\./d' ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+   ```
+
+   This will remove any lines starting with `\` (such as `\connect` or `\n` commands that might not be needed during a restore).
+
+### 2.a.5. **Run the import with `psql` in verbose mode**
+   Finally, try running `psql` in verbose mode to get more detailed information about what's causing the issue:
+
+   ```bash
+   psql -U newuser -d mydatabase -f ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql --echo-all --set=VERBOSITY=verbose
+   ```
+
+   This will provide detailed error messages that can help pinpoint exactly where the problem lies.
+
+### Summary of Steps:
+1. Verify file integrity with `md5sum`.
+2. Convert line endings using `sed`.
+3. Check if the file is in the correct format using `file` command.
+4. Clean up the SQL dump with `sed`.
+5. Try running the import with verbose mode enabled.
+
+Let me know how these steps work for you!
+
+### 2.a output:
+```
+[ec2-user@ip-172-31-13-155 ~]$ md5sum /home/ec2-user/seattlecars_listings.sql
+ba4803f588cef3179b35e864c070cf9b  /home/ec2-user/seattlecars_listings.sql
+[ec2-user@ip-172-31-13-155 ~]$ exit
+logout
+Connection to ec2-34-214-154-43.us-west-2.compute.amazonaws.com closed.
+douglasmckinley@Douglass-MacBook-Pro Downloads % md5 ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+
+MD5 (/Users/douglasmckinley/Desktop/wheelswatcher_documents/seattlecars_listings.sql) = ba4803f588cef3179b35e864c070cf9b
+douglasmckinley@Douglass-MacBook-Pro Downloads % sed -i 's/\r//' ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+
+sed: 1: "/Users/douglasmckinley/ ...": extra characters at the end of d command
+douglasmckinley@Douglass-MacBook-Pro Downloads % file ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+
+/Users/douglasmckinley/Desktop/wheelswatcher_documents/seattlecars_listings.sql: HTML document text, Unicode text, UTF-8 text, with very long lines (37881)
+douglasmckinley@Douglass-MacBook-Pro Downloads % pg_restore -U newuser -d mydatabase ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+
+pg_restore: error: input file appears to be a text format dump. Please use psql.
+douglasmckinley@Douglass-MacBook-Pro Downloads % sed -i '/^\\./d' ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+
+sed: 1: "/Users/douglasmckinley/ ...": extra characters at the end of d command
+douglasmckinley@Douglass-MacBook-Pro Downloads % 
+```
+
+### 2.b
+It looks like you're encountering two issues:
+
+1. **`sed` syntax issues on macOS**: The `sed` command behaves slightly differently on macOS compared to Linux. Specifically, macOS `sed` requires an explicit backup file extension when using the `-i` option. If you don’t want to create a backup, you can use `''` (empty quotes). Also, macOS `sed` doesn't interpret in-place edits the same way as Linux `sed`.
+
+2. **File format detection**: The `file` command is telling us that the SQL dump file might have some unusual content (it is being detected as an "HTML document text"). This suggests the file might have unwanted formatting or HTML tags embedded in it.
+
+### Fix 1: Correct the `sed` usage on macOS
+
+Here’s how you can properly use `sed` on macOS to clean up the SQL file:
+
+#### To remove Windows-style line endings (`\r`):
+```bash
+sed -i '' 's/\r//' ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+```
+
+#### To remove lines starting with `\`, which might be causing issues:
+```bash
+sed -i '' '/^\\./d' ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+```
+
+### Fix 2: Verifying the file format
+Since the `file` command indicates it is an HTML document, this could be due to the presence of HTML tags in the file. You can open the file in a text editor to verify whether it contains HTML. If it does, it may be possible that the `pg_dump` process or the transfer has introduced this formatting.
+
+### Fix 3: Use `psql` to restore the plain text dump
+Since `pg_restore` is for custom or binary-format dumps, you'll need to use `psql` to restore a plain text dump file. Once you've cleaned up the file, try importing it again using `psql`.
+
+```bash
+psql -U newuser -d mydatabase -f ~/Desktop/wheelswatcher_documents/seattlecars_listings.sql
+```
+```bash
+psql -U newuser -d mydatabase -f ~/Desktop/wheelswatcher_documents/converted.sql
+```
+
+
+### Steps to follow:
+
+1. Run the `sed` commands with the correct syntax for macOS.
+2. Open the file in a text editor (e.g., `vim`, `nano`, or any GUI text editor) to check for unwanted formatting or HTML content.
+3. Attempt to restore the file using `psql`.
+
+Let me know if any issues persist after trying these steps!
+
+
 #### 3. **Import the table into your local PostgreSQL database**
 Once you have the SQL dump file on your local machine, you can import it into your local PostgreSQL database using `psql`:
 
@@ -88,7 +412,7 @@ psql -U <LOCAL_USERNAME> -d <LOCAL_DATABASE> -f /path/to/dumpfile.sql
 Example:
 
 ```bash
-psql -U postgres -d localdb -f ~/yourtable_dump.sql
+psql -U newuser -d mydatabase -f ~/Desktop/wheelswatcher_documents/converted_file.sql
 ```
 
 This will import the table into your local PostgreSQL database.
