@@ -1,0 +1,114 @@
+aws is charging like $250/day for RDS, so we're gonna move the DB to local
+
+I'm using this guide to install porgresql on my mac:
+https://www.sqlshack.com/setting-up-a-postgresql-database-on-mac/
+
+```
+brew install postgresql@15
+```
+
+```
+brew services start postgresql
+```
+```
+brew services stop postgresql
+```
+
+create a root user that will have administrator privileges to the database server. Make sure that the service is running and then run the following
+
+```
+psql postgres
+```
+
+```
+CREATE ROLE newUser WITH LOGIN PASSWORD ‘password’;
+ALTER ROLE newUser CREATEDB;
+```
+```
+\q
+psql postgres -U newuser
+```
+
+Installing PGAdmin to navigate Postgres Database server
+Once installed, provide the credentials as follows.
+
+host – “localhost”
+user – “newuser”
+password – “password”
+maintenance database – “postgres”
+
+
+To copy an SQL table from an RDS instance to your local machine, you can use a combination of the following steps, assuming you are using PostgreSQL. The general idea is to export the table from the RDS instance and then import it into your local PostgreSQL database.
+
+### Steps:
+
+#### 1. **Export the table from RDS using `pg_dump`**
+You can use the `pg_dump` utility to export the data from the RDS PostgreSQL instance. Replace the placeholders with your actual RDS endpoint and credentials.
+
+```bash
+pg_dump -h <RDS_ENDPOINT> -U <USERNAME> -d <DATABASE_NAME> -t <TABLE_NAME> -f /path/to/dumpfile.sql
+```
+```bash
+pg_dump -h database-1.cluster-ro-cvu2u86aui5t.us-west-2.rds.amazonaws.com -U postgres -d seattlecars -t listings -f /home/ec2-user/seattlecars_listings.sql
+```
+
+Explanation:
+- `-h`: Hostname (your RDS endpoint)
+- `-U`: Username to connect to the database
+- `-d`: Database name
+- `-t`: Table name (the table you want to export)
+- `-f`: Output file for the dump
+
+Example:
+
+```bash
+pg_dump -h your-rds-endpoint.rds.amazonaws.com -U postgres -d yourdatabase -t yourtable -f ~/yourtable_dump.sql
+```
+
+This command will export the specified table to a file called `yourtable_dump.sql` on your local machine.
+
+#### 2. **Transfer the dump file to your local machine (if necessary)**
+If you’re running the above command on an EC2 instance or any other remote environment, you will need to copy the dump file to your local machine using `scp` or a similar tool.
+
+Example:
+
+```bash
+scp ec2-user@your-ec2-public-ip:/path/to/dumpfile.sql ~/local/destination/
+```
+```bash
+scp ec2-user@your-ec2-public-ip:/path/to/dumpfile.sql ~/local/destination/
+```
+#### 3. **Import the table into your local PostgreSQL database**
+Once you have the SQL dump file on your local machine, you can import it into your local PostgreSQL database using `psql`:
+
+```bash
+psql -U <LOCAL_USERNAME> -d <LOCAL_DATABASE> -f /path/to/dumpfile.sql
+```
+
+Example:
+
+```bash
+psql -U postgres -d localdb -f ~/yourtable_dump.sql
+```
+
+This will import the table into your local PostgreSQL database.
+
+#### 4. **Verifying the Data**
+Once the table is imported, you can connect to your local PostgreSQL instance and verify that the table has been imported correctly:
+
+```bash
+psql -U <LOCAL_USERNAME> -d <LOCAL_DATABASE>
+```
+
+```sql
+SELECT * FROM <TABLE_NAME>;
+```
+
+This will display the data from the table you imported.
+
+### Additional Notes:
+- If the table schema is very large, you might want to use compression when transferring the file.
+- Ensure your local PostgreSQL instance version is compatible with the version running on RDS to avoid compatibility issues.
+- Make sure the `pg_dump` and `psql` commands are installed on your machine. You can install them via the PostgreSQL client tools if they aren't available.
+
+Let me know if you need further details or adjustments for your specific setup!

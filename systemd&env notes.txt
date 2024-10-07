@@ -31,4 +31,5 @@ sudo systemctl daemon-reload
 sudo systemctl enable wheelswatcherapp.service
 sudo systemctl start wheelswatcherapp.service
 
+npm run build
 sudo systemctl restart wheelswatcherapp.service
