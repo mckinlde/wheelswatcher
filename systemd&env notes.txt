@@ -1,0 +1,34 @@
+sudo vim /etc/app.env
+```
+DB_URL='postgresql://postgres:kellybluebook@database-1.cluster-ro-cvu2u86aui5t.us-west-2.rds.amazonaws.com/seattlecars
+```
+
+sudo chmod 600 /etc/app.env
+sudo chown ec2-user:ec2-user /etc/app.env
+
+sudo vim /etc/systemd/system/wheelswatcherapp.service
+```
+[Unit]
+Description=Node.js App
+After=network.target multi-user.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/wheelswatcher/wheelswatcher
+ExecStart=/usr/bin/npm start
+Restart=always
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/app.env
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=wheelswatcherapp
+
+[Install]
+WantedBy=multi-user.target
+```
+
+sudo systemctl daemon-reload
+sudo systemctl enable wheelswatcherapp.service
+sudo systemctl start wheelswatcherapp.service
+
+sudo systemctl restart wheelswatcherapp.service
