@@ -230,3 +230,78 @@ Now, the dropdown values are securely sent to the backend, where the SQL query i
 ### Final Thoughts:
 - This approach prevents exposing SQL requests directly to the browser, protecting your database from direct access.
 - You can further enhance security by validating inputs on the backend and ensuring SQL queries are sanitized to prevent SQL injection.
+
+The `server.js` file should go in the **root directory** of your project, but it will be separate from the React frontend. To keep things organized, here's the general structure for your project when adding Express as the backend:
+
+### Suggested Project Structure:
+```
+/my-app
+  ├── /client                # Your React frontend code
+  │     ├── /public
+  │     ├── /src
+  │     └── package.json      # React package.json
+  ├── /server                 # Your Express backend
+  │     ├── server.js         # Express server file
+  │     └── package.json      # Express package.json
+  ├── package.json            # Root package.json (optional if you want to use one for both client and server)
+  └── README.md
+```
+
+### Steps:
+
+1. **Create a `server` folder**: In the root of your project, create a folder named `server`. This is where the `server.js` file will go.
+   
+   Example:
+   ```
+   /my-app
+     ├── /server
+     │     └── server.js
+   ```
+
+2. **Set up Express in the `server` folder**:
+   - Navigate into the `server` folder and initialize it with npm:
+     ```bash
+     cd server
+     npm init -y
+     npm install express body-parser pg cors
+     ```
+   - Add your `server.js` file inside the `server` folder.
+
+3. **Configure your backend** (`server/server.js`):
+   This file will handle the backend logic, including connecting to the RDS database and handling the API endpoints.
+
+4. **Configure your React app** (located in `client`):
+   In your `client/src/App.js`, make sure your `fetch` request points to the Express server running at `localhost:5000` (or another port if you change it).
+
+### Running Both React and Express
+
+1. **Running the backend**:
+   - From the `/server` directory, start your Express server with:
+     ```bash
+     node server.js
+     ```
+
+2. **Running the frontend**:
+   - From the `/client` directory, start your React app with:
+     ```bash
+     npm start
+     ```
+
+3. **Optionally, use Concurrently** (to run both React and Express at the same time):
+   - Install `concurrently`:
+     ```bash
+     npm install concurrently --save-dev
+     ```
+   - Add a `start` script in your root `package.json` (in `/my-app/`):
+     ```json
+     "scripts": {
+       "start": "concurrently \"npm run start --prefix client\" \"npm run start --prefix server\""
+     }
+     ```
+
+   This way, you can run both the React and Express servers with a single command:
+   ```bash
+   npm start
+   ```
+
+This structure ensures that the React frontend and Express backend are kept separate but can communicate effectively.
