@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import carData from './makemodel.json'; // Assuming JSON is stored locally
 
@@ -35,17 +35,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Select an area, make, and model to see the cars that have sold.
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
+          href="mailto:cadocary@gmail.com"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Contact
         </a>
 
         {/* Enhanced Dropdown Form */}
