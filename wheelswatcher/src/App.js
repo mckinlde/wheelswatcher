@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import carData from './public/makemodel.json'; // Assuming JSON is stored locally
+import carData from '../public/makemodel.json'; // Assuming JSON is stored locally
 
 function App() {
   const [selectedArea, setSelectedArea] = useState('');
