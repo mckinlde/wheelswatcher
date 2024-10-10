@@ -1,3 +1,4 @@
+/* Existing styles from your App.css */
 .App {
   text-align: center;
 }
@@ -35,4 +36,61 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* New styles for the dropdown and form */
+
+.dropdown-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.dropdown-label {
+  font-size: 1.2rem;
+  color: #61dafb;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.dropdown {
+  width: 200px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 2px solid #61dafb;
+  background-color: #282c34;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dropdown option {
+  background-color: #282c34;
+  color: white;
+}
+
+.submit-button {
+  background-color: #61dafb;
+  color: white;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #21a1f1;
+}
+
+form {
+  margin: 2rem 0;
 }

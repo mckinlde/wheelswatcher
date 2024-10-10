@@ -8,11 +8,9 @@ function App() {
   const [selectedMake, setSelectedMake] = useState('');
   const [selectedModel, setSelectedModel] = useState('');
 
-  // List of areas for the area dropdown
   const areas = [
     "auburn", "bham", "dothan", "shoals", "gadsden", "huntsville", "mobile", "montgomery", "tuscaloosa",
     "anchorage", "fairbanks", "kenai", "juneau", "flagstaff", "mohave", "phoenix", "prescott", "showlow",
-    "sierravista", "tucson", "yuma", "fayar", "fortsmith", "jonesboro", "littlerock", "texarkana",
     // Add more areas as needed...
   ];
 
@@ -50,11 +48,11 @@ function App() {
           Learn React
         </a>
 
-        {/* Dropdown form starts here */}
-        <form onSubmit={handleSubmit}>
+        {/* Enhanced Dropdown Form */}
+        <form onSubmit={handleSubmit} className="dropdown-form">
           {/* Area Dropdown */}
-          <label htmlFor="areaDropdown">Choose an area:</label>
-          <select id="areaDropdown" value={selectedArea} onChange={handleAreaChange}>
+          <label htmlFor="areaDropdown" className="dropdown-label">Choose an area:</label>
+          <select id="areaDropdown" value={selectedArea} onChange={handleAreaChange} className="dropdown">
             <option value="">-- Select an area --</option>
             {areas.map((area, index) => (
               <option key={index} value={area}>
@@ -64,8 +62,8 @@ function App() {
           </select>
 
           {/* Make Dropdown */}
-          <label htmlFor="makeDropdown">Select Make:</label>
-          <select id="makeDropdown" value={selectedMake} onChange={handleMakeChange}>
+          <label htmlFor="makeDropdown" className="dropdown-label">Select Make:</label>
+          <select id="makeDropdown" value={selectedMake} onChange={handleMakeChange} className="dropdown">
             <option value="">-- Choose Make --</option>
             {Object.keys(carData).map((make) => (
               <option key={make} value={make}>
@@ -77,8 +75,8 @@ function App() {
           {/* Model Dropdown (conditionally rendered) */}
           {selectedMake && (
             <>
-              <label htmlFor="modelDropdown">Select Model:</label>
-              <select id="modelDropdown" value={selectedModel} onChange={handleModelChange}>
+              <label htmlFor="modelDropdown" className="dropdown-label">Select Model:</label>
+              <select id="modelDropdown" value={selectedModel} onChange={handleModelChange} className="dropdown">
                 <option value="">-- Choose Model --</option>
                 {carData[selectedMake].map((model) => (
                   <option key={model} value={model}>
@@ -89,9 +87,9 @@ function App() {
             </>
           )}
 
-          <button type="submit">Submit</button>
+          <button type="submit" className="submit-button">Submit</button>
         </form>
-        {/* Dropdown form ends here */}
+        {/* End of Enhanced Dropdown Form */}
       </header>
     </div>
   );
