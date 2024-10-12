@@ -25,6 +25,7 @@ app.post('/query-listings', async (req, res) => {
     const query = `
       SELECT * FROM listings
       WHERE area = $1 AND make = $2 AND model = $3
+      LIMIT 10;
     `;
     const values = [area, make, model];
 
