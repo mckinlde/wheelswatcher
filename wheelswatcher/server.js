@@ -5,7 +5,13 @@ const { Pool } = require('pg');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+// Configure CORS to allow only the specific domain
+app.use(cors({
+    origin: 'https://carsalesignal.com',  // Allow only your frontend domain
+    methods: ['GET', 'POST'],             // Allow GET and POST requests
+    allowedHeaders: ['Content-Type'],     // Allow specific headers
+    credentials: true                     // If you need to allow cookies
+  }));
 
 // PostgreSQL connection pool (adjust credentials to your RDS instance)
 const pool = new Pool({
