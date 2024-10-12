@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import './App.css';
 import carData from './makemodel.json'; // Assuming JSON is stored locally
 
+// todo: query the backend
+
 function App() {
   const [selectedArea, setSelectedArea] = useState('');
   const [selectedMake, setSelectedMake] = useState('');
