@@ -38,7 +38,7 @@ function App() {
     alert(`Selected Area: ${selectedArea}, Make: ${selectedMake}, Model: ${selectedModel}`);
   
     try {
-      const response = await axios.post('http://34.213.51.19:3001/query-listings', {
+      const response = await axios.post('https://www.carsalesignal.com/api/query-listings', {
         area: selectedArea,
         make: selectedMake,
         model: selectedModel,
