@@ -43,6 +43,12 @@ app.post('/query-listings', async (req, res) => {
   }
 });
 
+// Add this route to handle the health check
+app.get('/api/health-check', (req, res) => {
+    res.status(200).send('API is healthy');
+  });
+  
+
 // Start the server
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
