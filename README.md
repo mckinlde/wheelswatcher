@@ -5,6 +5,13 @@ Easily Deploy Full Stack Node.js Apps on AWS EC2 | Step-by-Step Tutorial
 https://www.youtube.com/watch?v=nQdyiK7-VlQ
 
 Snippets: 
+### keep both api and react app running in the background
+```
+npm install -g pm2
+pm2 start serve --name react-app -- serve -s build -l 3000
+pm2 start server.js --name express-server
+```
+
 ### install git and node
 ```
 sudo yum update -y
