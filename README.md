@@ -4,6 +4,22 @@ A node app on AWS (PERN stack)
 Easily Deploy Full Stack Node.js Apps on AWS EC2 | Step-by-Step Tutorial
 https://www.youtube.com/watch?v=nQdyiK7-VlQ
 
+There isn't a great tutorial for setting up an ALB w/target groups and SSL for routing traffic from 80->443->3000 to get the node app in a browser
+Maybe I should make one, maybe I just need to have a better search
+In any case, I think I have that working, and I can run both the server.js backend in the background and react app in the foreground with:
+```
+node /home/ec2-user/wheelswatcher/wheelswatcher/server.js &
+cd /home/ec2-user/wheelswatcher/wheelswatcher
+npm start
+```
+
+and then I expect to be able to go to carsalesignal.com and have it work.
+
+In a previous test where I just opened ports and used a manual copy/paste of <public-ip>:3000 into the browser URL bar it did load and got a response from the database correctly.
+
+So all we're testing now is DNS/NS/SSL/ALB/Route53 stuff, no meaningful code changes
+
+
 Snippets: 
 ### keep both api and react app running in the background
 ```
