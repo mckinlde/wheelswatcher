@@ -24,7 +24,7 @@ const pool = new Pool({
 
 
 // Endpoint to run a SELECT query based on dropdown inputs
-app.post('/query-listings', async (req, res) => {
+app.post('/api/query-listings', async (req, res) => {
   const { area, make, model } = req.body;
 
   try {
