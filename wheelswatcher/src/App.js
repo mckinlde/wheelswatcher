@@ -4,6 +4,10 @@ import './App.css';
 import carData from './makemodel.json'; // Assuming JSON is stored locally
 
 // todo: query the backend
+import axios from 'axios';
+
+
+
 
 function App() {
   const [selectedArea, setSelectedArea] = useState('');
@@ -29,9 +33,21 @@ function App() {
     setSelectedModel(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     alert(`Selected Area: ${selectedArea}, Make: ${selectedMake}, Model: ${selectedModel}`);
+  
+    try {
+      const response = await axios.post('http://your-api-url.com/query-listings', {
+        area: selectedArea,
+        make: selectedMake,
+        model: selectedModel,
+      });
+  
+      console.log('Query Result:', response.data);
+    } catch (error) {
+      console.error('Error querying the database:', error);
+    }
   };
 
   return (
