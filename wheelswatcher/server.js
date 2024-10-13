@@ -57,7 +57,7 @@ app.post('/api/query-area', async (req, res) => {
           AND make = 'ford' 
           AND model ILIKE '%f150%' 
           AND drive = '4wd' 
-          AND year BETWEEN 2001 AND 2003
+          AND CAST(year AS INTEGER) BETWEEN 2001 AND 2003
           AND updated != 'not updated yet' 
         LIMIT 100;
         `;
