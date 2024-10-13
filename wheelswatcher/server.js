@@ -55,11 +55,11 @@ app.post('/api/query-area', async (req, res) => {
         FROM listings 
         WHERE make = 'subaru' 
           AND model = 'outback'
-          AND (body ILIKE '%6%' OR 
-              body ILIKE '%6cyl%' OR 
-              body ILIKE '%6 cyl%' OR 
-              body ILIKE '%6cylinder%' OR 
-              body ILIKE '%6 cylinder%' OR 
+          AND (posting_body ILIKE '%6%' OR 
+              posting_body ILIKE '%6cyl%' OR 
+              posting_body ILIKE '%6 cyl%' OR 
+              posting_body ILIKE '%6cylinder%' OR 
+              posting_body ILIKE '%6 cylinder%' OR 
               cylinders = '6 cylinders')
           AND CAST(year AS INTEGER) BETWEEN 2001 AND 2010
           AND updated != 'not updated yet' 
