@@ -11,8 +11,8 @@ import axios from 'axios';
 
 function App() {
   const [selectedArea, setSelectedArea] = useState('');
-  const [selectedMake, setSelectedMake] = useState('');
-  const [selectedModel, setSelectedModel] = useState('');
+  // const [selectedMake, setSelectedMake] = useState('');
+  // const [selectedModel, setSelectedModel] = useState('');
 
   const areas = [
     "auburn", "bham", "dothan", "shoals", "gadsden", "huntsville", "mobile", "montgomery", "tuscaloosa",
@@ -24,14 +24,14 @@ function App() {
     setSelectedArea(e.target.value);
   };
 
-  const handleMakeChange = (e) => {
-    setSelectedMake(e.target.value);
-    setSelectedModel(''); // Reset model when make changes
-  };
+  // const handleMakeChange = (e) => {
+  //   setSelectedMake(e.target.value);
+  //   setSelectedModel(''); // Reset model when make changes
+  // };
 
-  const handleModelChange = (e) => {
-    setSelectedModel(e.target.value);
-  };
+  // const handleModelChange = (e) => {
+  //   setSelectedModel(e.target.value);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,8 +40,8 @@ function App() {
     try {
       const response = await axios.post('https://carsalesignal.com/api/query-listings', {
         area: selectedArea,
-        make: selectedMake,
-        model: selectedModel,
+        // make: selectedMake,
+        // model: selectedModel,
       });
   
       console.log('Query Result:', response.data);
@@ -80,7 +80,7 @@ function App() {
           </select>
 
           {/* Make Dropdown */}
-          <label htmlFor="makeDropdown" className="dropdown-label">Select Make:</label>
+          {/* <label htmlFor="makeDropdown" className="dropdown-label">Select Make:</label>
           <select id="makeDropdown" value={selectedMake} onChange={handleMakeChange} className="dropdown">
             <option value="">-- Choose Make --</option>
             {Object.keys(carData).map((make) => (
@@ -88,10 +88,10 @@ function App() {
                 {make}
               </option>
             ))}
-          </select>
+          </select> */}
 
           {/* Model Dropdown (conditionally rendered) */}
-          {selectedMake && (
+          {/* {selectedMake && (
             <>
               <label htmlFor="modelDropdown" className="dropdown-label">Select Model:</label>
               <select id="modelDropdown" value={selectedModel} onChange={handleModelChange} className="dropdown">
@@ -103,7 +103,7 @@ function App() {
                 ))}
               </select>
             </>
-          )}
+          )} */}
 
           <button type="submit" className="submit-button">Submit</button>
         </form>
