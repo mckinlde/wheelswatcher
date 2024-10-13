@@ -52,7 +52,7 @@ app.post('/api/query-area', async (req, res) => {
     try {
         const query = `
             SELECT title,price,added,updated FROM listings
-            WHERE area = $1
+            WHERE area = $1 AND updated != 'not updated yet'
             LIMIT 100;
         `;
       const values = [area];
