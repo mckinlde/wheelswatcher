@@ -12,8 +12,10 @@ import {
 // Register necessary Chart.js components
 ChartJS.register(LinearScale, PointElement, Tooltip, Title, Legend);
 
-const PriceDurationGraph = ({ listings }) => {
-  const [chartData, setChartData] = useState({});
+const PriceDurationGraph = ({ listings = [] }) => {
+  const [chartData, setChartData] = useState({
+    datasets: [], // Ensure datasets are always defined
+  });
   const [chartOptions, setChartOptions] = useState({});
 
   useEffect(() => {
@@ -80,6 +82,11 @@ const PriceDurationGraph = ({ listings }) => {
       });
     }
   }, [listings]);
+
+  // Avoid rendering the chart if there's no data
+  if (!chartData.datasets || chartData.datasets.length === 0) {
+    return <div>No data available for the selected area.</div>;
+  }
 
   return <Scatter data={chartData} options={chartOptions} />;
 };
