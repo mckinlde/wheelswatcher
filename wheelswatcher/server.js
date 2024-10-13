@@ -60,9 +60,9 @@ app.post('/api/query-area', async (req, res) => {
           AND updated != 'not updated yet' 
         LIMIT 100;
         `;
-      const values = [area];
+      //const values = [area];
   
-      const result = await pool.query(query, values);
+      const result = await pool.query(query) // No need for 'values' array. , values);
       res.json(result.rows);
     } catch (err) {
       console.error('Error executing query', err);
