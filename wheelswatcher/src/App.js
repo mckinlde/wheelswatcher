@@ -4,6 +4,7 @@ import './App.css';
 import carData from './makemodel.json'; // Assuming JSON is stored locally
 import axios from 'axios'; // query the backend
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
+import PriceOdometerTime3DGraph from 'PriceOdometerTime3DGraph';
 
 
 // Example data structure of states and areas
@@ -189,6 +190,7 @@ function App() {
             <PriceDurationGraph listings={results} />
             <PriceOdometerGraph listings={results} />
             <OdometerTimeGraph listings={results} />
+            <PriceOdometerTime3DGraph listings={results} />
           </>
         )}
 
