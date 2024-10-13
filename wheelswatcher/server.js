@@ -29,9 +29,9 @@ app.post('/api/query-listings', async (req, res) => {
 
   try {
     const query = `
-      SELECT * FROM listings
-      WHERE area = $1 AND make = $2 AND model = $3
-      LIMIT 10;
+      SELECT title, price FROM listings
+      WHERE area = $1
+      LIMIT 100;
     `;
     const values = [area, make, model];
 
