@@ -114,22 +114,24 @@ function App() {
 
         {/* Display results in a table */}
         {results.length > 0 && (
-          <table className="results-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((car, index) => (
-                <tr key={index}>
-                  <td>{car.title}</td>
-                  <td>{car.price}</td>
+          <div className="table-container">
+            <table className="results-table">
+              <thead>
+                <tr>
+                  <th>Price</th>
+                  <th>Title</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {results.map((car, index) => (
+                  <tr key={index}>
+                    <td>{car.price}</td>
+                    <td>{car.title}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </header>
     </div>
