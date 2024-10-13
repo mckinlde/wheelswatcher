@@ -28,6 +28,11 @@ function PriceOdometerTime3DGraph({ listings }) {
           yaxis: { title: 'Days Listed' },
           zaxis: { title: 'Price ($)' },
         },
+        paper_bgcolor: '#1e1e1e',  // Set background color of the entire chart to match 2D graphs
+        plot_bgcolor: '#1e1e1e',   // Set the background color inside the plotting area
+        font: {
+          color: '#ffffff',  // Set font color to white to make it visible on dark background
+        },
       }}
     />
   );
