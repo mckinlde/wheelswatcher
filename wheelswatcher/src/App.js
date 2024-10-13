@@ -5,6 +5,9 @@ import carData from './makemodel.json'; // Assuming JSON is stored locally
 import axios from 'axios'; // query the backend
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
 import PriceOdometerTime3DGraph from './PriceOdometerTime3DGraph';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink } from '@fortawesome/free-solid-svg-icons';
+
 
 
 // Example data structure of states and areas
@@ -250,8 +253,7 @@ function App() {
         )}
 
 
-// Use the fetchUnsoldCars function appropriately in your flow, for example after form submission
-
+        {/* Use the fetchUnsoldCars function appropriately in your flow, for example after form submission */}
         {unsoldCars.length > 0 && (
           <div className="table-container">
             <h2>Cars Available in WA</h2>
@@ -274,7 +276,7 @@ function App() {
                     <td>{car.title}</td>
                     <td>
                       <a href={car.url} target="_blank" rel="noopener noreferrer">
-                        <i className="fas fa-link"></i>  {/* Font Awesome or custom icon */}
+                        <FontAwesomeIcon icon={faLink} />  {/* Font Awesome icon */}
                       </a>
                     </td>
                   </tr>
