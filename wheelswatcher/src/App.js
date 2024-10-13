@@ -202,6 +202,7 @@ function App() {
                 <tr>
                   <th>Price</th>
                   <th>Odometer</th>
+                  <th>Year</th>
                   <th>Title</th>
                 </tr>
               </thead>
@@ -210,6 +211,7 @@ function App() {
                   <tr key={index}>
                     <td>{car.price}</td>
                     <td>{car.odometer}</td>
+                    <td>{car.year}</td>
                     <td>{car.title}</td>
                   </tr>
                 ))}
