@@ -13,6 +13,7 @@ app.use(cors({
     credentials: true                     // If you need to allow cookies
   }));
 
+  
 // PostgreSQL connection pool (adjust credentials to your RDS instance)
 const pool = new Pool({
   user: 'postgres',
@@ -29,9 +30,9 @@ app.post('/api/query-listings', async (req, res) => {
 
   try {
     const query = `
-      SELECT title,price FROM listings
-      WHERE area = $1
-      LIMIT 100;
+      SELECT * FROM listings
+      WHERE area = $1 AND make = $2 AND model = $3
+      LIMIT 10;
     `;
     const values = [area, make, model];
 
@@ -43,6 +44,26 @@ app.post('/api/query-listings', async (req, res) => {
   }
 });
 
+
+// Endpoint to run a SELECT query based on area only
+app.post('/api/query-area', async (req, res) => {
+    const { area } = req.body;
+  
+    try {
+        const query = `
+            SELECT title,price FROM listings
+            WHERE area = $1
+            LIMIT 100;
+        `;
+      const values = [area];
+  
+      const result = await pool.query(query, values);
+      res.json(result.rows);
+    } catch (err) {
+      console.error('Error executing query', err);
+      res.status(500).json({ error: 'Database query failed' });
+    }
+  });
 // Add this route to handle the health check
 app.get('/api/health-check', (req, res) => {
     res.status(200).send('API is healthy');
