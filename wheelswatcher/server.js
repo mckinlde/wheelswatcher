@@ -51,7 +51,7 @@ app.post('/api/query-area', async (req, res) => {
   
     try {
         const query = `
-            SELECT title,price FROM listings
+            SELECT title,price,added,updated FROM listings
             WHERE area = $1
             LIMIT 100;
         `;
