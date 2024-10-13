@@ -118,6 +118,7 @@ function App() {
               <thead>
                 <tr>
                   <th>Price</th>
+                  <th>Odometer</th>
                   <th>Title</th>
                 </tr>
               </thead>
@@ -125,6 +126,7 @@ function App() {
                 {results.map((car, index) => (
                   <tr key={index}>
                     <td>{car.price}</td>
+                    <td>{car.odometer}</td>
                     <td>{car.title}</td>
                   </tr>
                 ))}
