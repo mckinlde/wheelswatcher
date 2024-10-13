@@ -197,6 +197,7 @@ function App() {
         {/* Display results in a table */}
         {results.length > 0 && (
           <div className="table-container">
+            <h2>Cars Sold in the past, the Input Data to the Graphs</h2> {/* Add title here */}
             <table className="results-table">
               <thead>
                 <tr>
@@ -219,6 +220,7 @@ function App() {
             </table>
           </div>
         )}
+
       </header>
     </div>
   );
