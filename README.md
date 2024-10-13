@@ -123,6 +123,94 @@ Ensure security groups are configured to allow traffic on the required ports.
 This approach will allow you to serve both the React app and API through the same ALB without any mixed content or port issues.
 ### 6. be frusturated for several hours and finally get it to work by setting up ALB to go 80->3000/3001 instead of 443->3000/3001
 
+# Now time to setup a systemD service to run server.js and start
+## --------------------------
+Yes, we can create a systemd service that handles both `server.js` (your Express API) and the React app. Here’s how we can do it by creating two separate systemd services—one for `server.js` and one for the React app, or a single service that runs both. Let's opt for the single service to manage both processes together.
+
+### Steps to Create a Combined systemd Service
+
+#### 1. **Create a Combined Service File**
+First, create a new systemd service file:
+
+```bash
+sudo nano /etc/systemd/system/wheelswatcher-combined.service
+```
+
+#### 2. **Add the Combined Service Configuration**
+Paste the following configuration into the file. This configuration will run both `server.js` and the React app (`npm start`):
+
+```ini
+[Unit]
+Description=Node.js Server and React App for wheelswatcher
+After=network.target
+
+[Service]
+ExecStart=/bin/bash -c 'node /home/ec2-user/wheelswatcher/wheelswatcher/server.js & cd /home/ec2-user/wheelswatcher/wheelswatcher && npm start'
+Restart=on-failure
+User=ec2-user
+Group=ec2-user
+Environment=NODE_ENV=production
+WorkingDirectory=/home/ec2-user/wheelswatcher/wheelswatcher
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=wheelswatcher-combined
+
+[Install]
+WantedBy=multi-user.target
+```
+
+In this setup:
+- `/bin/bash -c` allows multiple commands to be run in sequence. The first command starts `server.js`, and the second command starts the React app using `npm start`.
+- Both processes will be launched together when the service starts.
+
+#### 3. **Reload systemd to Apply the New Service**
+
+```bash
+sudo systemctl daemon-reload
+```
+
+#### 4. **Start the Combined Service**
+
+```bash
+sudo systemctl start wheelswatcher-combined
+```
+
+#### 5. **Enable the Service on Boot**
+
+```bash
+sudo systemctl enable wheelswatcher-combined
+```
+
+#### 6. **Check the Status of the Combined Service**
+
+```bash
+sudo systemctl status wheelswatcher-combined
+```
+
+This will show you the status of both the Express API and the React app.
+
+#### 7. **Logs for Troubleshooting**
+If you want to check the logs to troubleshoot any issues, you can use:
+
+```bash
+sudo journalctl -u wheelswatcher-combined
+```
+
+### Stopping and Restarting
+
+- To **stop** both processes:
+
+  ```bash
+  sudo systemctl stop wheelswatcher-combined
+  ```
+
+- To **restart** both processes:
+
+  ```bash
+  sudo systemctl restart wheelswatcher-combined
+  ```
+
+This approach ensures that both your Express server and React app are running as background processes, managed by `systemd`. They will automatically restart if the service crashes, and you can manage them with a single service.
 
 # Snippets: 
 ## --------------------------
