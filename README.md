@@ -121,6 +121,7 @@ Configure path-based routing: In the ALB listener, route /api/* to the API targe
 Update the React app to use /api/ in its API requests.
 Ensure security groups are configured to allow traffic on the required ports.
 This approach will allow you to serve both the React app and API through the same ALB without any mixed content or port issues.
+### 6. be frusturated for several hours and finally get it to work by setting up ALB to go 80->3000/3001 instead of 443->3000/3001
 
 
 # Snippets: 
