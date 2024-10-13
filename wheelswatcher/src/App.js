@@ -35,7 +35,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Selected Area: ${selectedArea}, Make: ${selectedMake}, Model: ${selectedModel}`);
+    alert(`Selected Area: ${selectedArea}`); // , Make: ${selectedMake}, Model: ${selectedModel}`);
   
     try {
       const response = await axios.post('https://carsalesignal.com/api/query-listings', {
