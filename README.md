@@ -214,6 +214,14 @@ This approach ensures that both your Express server and React app are running as
 
 # Snippets: 
 ## --------------------------
+### Pull new version and restart:
+```
+cd wheelswatcher/wheelswatcher/
+git pull origin main
+npm run build
+sudo systemctl restart wheelswatcher-combined
+```
+
 ### run both the server.js backend in the background and react app in the foreground with:
 ```
 node /home/ec2-user/wheelswatcher/wheelswatcher/server.js &
