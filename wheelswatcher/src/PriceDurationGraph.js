@@ -1,66 +1,87 @@
-import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-
-// Register the components needed for the chart
-ChartJS.register(
-  CategoryScale,
+import React, { useEffect, useState } from 'react';
+import { Scatter } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
   LinearScale,
   PointElement,
-  LineElement,
-  Title,
   Tooltip,
-  Legend
-);
+  Title,
+  Legend,
+} from 'chart.js';
+
+// Register necessary Chart.js components
+ChartJS.register(LinearScale, PointElement, Tooltip, Title, Legend);
 
 const PriceDurationGraph = ({ listings }) => {
-  // Extract data for the graph (price and duration)
-  const chartData = listings.map(listing => ({
-    title: listing.title,
-    price: parseFloat(listing.price.replace(/[$,]/g, '')), // Parse the price string to a number
-    duration: Math.abs(new Date(listing.updated) - new Date(listing.added)) / (1000 * 3600 * 24) // Convert duration to days
-  }));
+  const [chartData, setChartData] = useState({});
+  const [chartOptions, setChartOptions] = useState({});
 
-  // Prepare the data for the Chart.js line chart
-  const data = {
-    labels: chartData.map(item => item.title), // Use listing titles as labels
-    datasets: [
-      {
-        label: 'Price ($)',
-        data: chartData.map(item => item.price),
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: false,
-      },
-      {
-        label: 'Duration (Days)',
-        data: chartData.map(item => item.duration),
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        fill: false,
-      },
-    ],
-  };
+  useEffect(() => {
+    if (listings.length > 0) {
+      // Convert price strings to numbers and calculate days duration
+      const formattedData = listings.map(listing => {
+        const price = Number(listing.price.replace(/[^0-9.-]+/g, "")); // Remove $ and commas
+        const addedDate = new Date(listing.added);
+        const updatedDate = new Date(listing.updated);
+        const days = Math.ceil((updatedDate - addedDate) / (1000 * 60 * 60 * 24)); // Convert ms to days
+        return { x: days, y: price };
+      });
 
-  // Chart.js options
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Price vs Duration (Days) of Listings',
-      },
-    },
-  };
+      // Find min and max values for scaling
+      const minDays = Math.min(...formattedData.map(d => d.x));
+      const maxDays = Math.max(...formattedData.map(d => d.x));
+      const minPrice = Math.min(...formattedData.map(d => d.y));
+      const maxPrice = Math.max(...formattedData.map(d => d.y));
 
-  return (
-    <div className="graph-container">
-      <Line data={data} options={options} />
-    </div>
-  );
+      const buffer = 1.2; // 120% buffer
+
+      setChartData({
+        datasets: [
+          {
+            label: 'Price vs Duration',
+            data: formattedData,
+            backgroundColor: 'rgba(75, 192, 192, 1)', // Color of the dots
+          },
+        ],
+      });
+
+      setChartOptions({
+        scales: {
+          x: {
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Days',
+            },
+            min: minDays * (1 / buffer), // Scale with buffer
+            max: maxDays * buffer,
+          },
+          y: {
+            type: 'linear',
+            title: {
+              display: true,
+              text: 'Price ($)',
+            },
+            min: minPrice * (1 / buffer), // Scale with buffer
+            max: maxPrice * buffer,
+          },
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function (context) {
+                const days = context.raw.x;
+                const price = context.raw.y;
+                return `Price: $${price}, Days: ${days}`;
+              },
+            },
+          },
+        },
+      });
+    }
+  }, [listings]);
+
+  return <Scatter data={chartData} options={chartOptions} />;
 };
 
 export default PriceDurationGraph;
