@@ -25,8 +25,8 @@ function PriceOdometerTime3DGraph({ listings }) {
         height: 600,
         scene: {
           xaxis: { title: 'Odometer' },
-          yaxis: { title: 'Price ($)' },
-          zaxis: { title: 'Days Listed' },
+          yaxis: { title: 'Days Listed' },
+          zaxis: { title: 'Price ($)' },
         },
       }}
     />
