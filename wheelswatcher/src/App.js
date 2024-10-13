@@ -13,6 +13,7 @@ function App() {
   const [selectedArea, setSelectedArea] = useState('');
   // const [selectedMake, setSelectedMake] = useState('');
   // const [selectedModel, setSelectedModel] = useState('');
+  const [results, setResults] = useState([]); // To store the query results
 
   const areas = [
     "auburn", "bham", "dothan", "shoals", "gadsden", "huntsville", "mobile", "montgomery", "tuscaloosa",
@@ -35,7 +36,7 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Selected Area: ${selectedArea}`); // , Make: ${selectedMake}, Model: ${selectedModel}`);
+    // alert(`Selected Area: ${selectedArea}, Make: ${selectedMake}, Model: ${selectedModel}`);
   
     try {
       const response = await axios.post('https://carsalesignal.com/api/query-area', {
@@ -45,6 +46,7 @@ function App() {
       });
   
       console.log('Query Result:', response.data);
+      setResults(response.data); // Set the response data into state
     } catch (error) {
       console.error('Error querying the database:', error);
     }
@@ -108,6 +110,27 @@ function App() {
           <button type="submit" className="submit-button">Submit</button>
         </form>
         {/* End of Enhanced Dropdown Form */}
+
+
+        {/* Display results in a table */}
+        {results.length > 0 && (
+          <table className="results-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results.map((car, index) => (
+                <tr key={index}>
+                  <td>{car.title}</td>
+                  <td>{car.price}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </header>
     </div>
   );
