@@ -1,94 +1,74 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Scatter } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Title,
-  Legend,
-} from 'chart.js';
+import 'chart.js/auto';
 
-// Register necessary Chart.js components
-ChartJS.register(LinearScale, PointElement, Tooltip, Title, Legend);
+function PriceDurationGraph({ listings }) {
+  // Parse listings into chart data
+  const chartData = {
+    datasets: [{
+      label: 'Car Listings',
+      data: listings.map((listing) => ({
+        x: (new Date(listing.updated) - new Date(listing.added)) / (1000 * 60 * 60 * 24), // Convert time to days
+        y: parseFloat(listing.price.replace(/[^0-9.-]+/g, '')), // Extract the numeric price
+        title: listing.title, // Include title for tooltip
+      })),
+      backgroundColor: 'rgba(75, 192, 192, 0.6)', // Customize dot color
+      pointRadius: 6, // Increase point size for better visibility
+    }],
+  };
 
-const PriceDurationGraph = ({ listings = [] }) => {
-  const [chartData, setChartData] = useState({
-    datasets: [], // Ensure datasets are always defined
-  });
-  const [chartOptions, setChartOptions] = useState({});
+  // Find the max values for price and days to extend the axes
+  const maxDays = Math.max(...listings.map((listing) => (new Date(listing.updated) - new Date(listing.added)) / (1000 * 60 * 60 * 24)));
+  const maxPrice = Math.max(...listings.map((listing) => parseFloat(listing.price.replace(/[^0-9.-]+/g, ''))));
 
-  useEffect(() => {
-    if (listings.length > 0) {
-      // Convert price strings to numbers and calculate days duration
-      const formattedData = listings.map(listing => {
-        const price = Number(listing.price.replace(/[^0-9.-]+/g, "")); // Remove $ and commas
-        const addedDate = new Date(listing.added);
-        const updatedDate = new Date(listing.updated);
-        const days = Math.ceil((updatedDate - addedDate) / (1000 * 60 * 60 * 24)); // Convert ms to days
-        return { x: days, y: price };
-      });
-
-      // Find min and max values for scaling
-      const minDays = Math.min(...formattedData.map(d => d.x));
-      const maxDays = Math.max(...formattedData.map(d => d.x));
-      const minPrice = Math.min(...formattedData.map(d => d.y));
-      const maxPrice = Math.max(...formattedData.map(d => d.y));
-
-      const buffer = 1.2; // 120% buffer
-
-      setChartData({
-        datasets: [
-          {
-            label: 'Price vs Duration',
-            data: formattedData,
-            backgroundColor: 'rgba(75, 192, 192, 1)', // Color of the dots
-          },
-        ],
-      });
-
-      setChartOptions({
-        scales: {
-          x: {
-            type: 'linear',
-            title: {
-              display: true,
-              text: 'Days',
-            },
-            min: minDays * (1 / buffer), // Scale with buffer
-            max: maxDays * buffer,
-          },
-          y: {
-            type: 'linear',
-            title: {
-              display: true,
-              text: 'Price ($)',
-            },
-            min: minPrice * (1 / buffer), // Scale with buffer
-            max: maxPrice * buffer,
+  // Chart options
+  const options = {
+    scales: {
+      x: {
+        type: 'linear',
+        title: {
+          display: true,
+          text: 'Days Listed',
+          color: '#ffffff', // Label color
+        },
+        min: 0, // Start at 0
+        max: maxDays * 1.1, // Extend to 110% of the max days
+        ticks: {
+          color: '#ffffff', // Tick color
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Price ($)',
+          color: '#ffffff', // Label color
+        },
+        min: 0, // Start at 0
+        max: maxPrice * 1.1, // Extend to 110% of the max price
+        ticks: {
+          color: '#ffffff', // Tick color
+        },
+      },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          // Customize tooltip to show the title on hover
+          label: function (context) {
+            const listing = context.raw;
+            return `${listing.title}: $${listing.y.toFixed(2)}, Days: ${listing.x.toFixed(1)}`;
           },
         },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function (context) {
-                const days = context.raw.x;
-                const price = context.raw.y;
-                return `Price: $${price}, Days: ${days}`;
-              },
-            },
-          },
-        },
-      });
-    }
-  }, [listings]);
+      },
+    },
+    maintainAspectRatio: false,
+  };
 
-  // Avoid rendering the chart if there's no data
-  if (!chartData.datasets || chartData.datasets.length === 0) {
-    return <div>No data available for the selected area.</div>;
-  }
-
-  return <Scatter data={chartData} options={chartOptions} />;
-};
+  return (
+    <div style={{ position: 'relative', height: '400px', width: '100%' }}>
+      <Scatter data={chartData} options={options} />
+    </div>
+  );
+}
 
 export default PriceDurationGraph;
