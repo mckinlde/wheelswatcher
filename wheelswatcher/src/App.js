@@ -105,9 +105,9 @@ function App() {
 
 
         {/* Render the PriceDurationGraph component only if listings data is available */}
-        {listings.length > 0 && (
+        {results.length > 0 && (
           <div className="graph-section">
-            <PriceDurationGraph listings={listings} />
+            <PriceDurationGraph listings={results} />
           </div>
         )}
 
