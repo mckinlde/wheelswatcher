@@ -53,8 +53,7 @@ app.post('/api/query-area', async (req, res) => {
         const query = `
         SELECT title, price, odometer, added, updated 
         FROM listings 
-        WHERE area = $1 
-          AND make = 'ford' 
+        WHERE make = 'ford' 
           AND model ILIKE '%f150%' 
           AND drive = '4wd' 
           AND CAST(year AS INTEGER) BETWEEN 2001 AND 2003
