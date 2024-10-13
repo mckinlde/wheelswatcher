@@ -51,7 +51,7 @@ app.post('/api/query-area', async (req, res) => {
   
     try {
       const query = `
-        SELECT title, price, odometer, added, updated 
+        SELECT title, price, year, odometer, added, updated 
         FROM listings 
         WHERE make = 'subaru' 
           AND model = 'outback'
