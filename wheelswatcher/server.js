@@ -51,9 +51,15 @@ app.post('/api/query-area', async (req, res) => {
   
     try {
         const query = `
-            SELECT title,price,odometer,added,updated FROM listings
-            WHERE area = $1 AND updated != 'not updated yet'
-            LIMIT 100;
+        SELECT title, price, odometer, added, updated 
+        FROM listings 
+        WHERE area = $1 
+          AND make = 'ford' 
+          AND model ILIKE '%f150%' 
+          AND drive = '4wd' 
+          AND year BETWEEN 2001 AND 2003
+          AND updated != 'not updated yet' 
+        LIMIT 100;
         `;
       const values = [area];
   
