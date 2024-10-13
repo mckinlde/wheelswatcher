@@ -1,6 +1,16 @@
 # wheelswatcher
 A node app on AWS (PERN stack)
 
+## --------------------------
+### Pull new version and restart:
+```
+cd wheelswatcher/wheelswatcher/
+git pull origin main
+npm run build
+sudo systemctl restart wheelswatcher-combined
+```
+## --------------------------
+
 Easily Deploy Full Stack Node.js Apps on AWS EC2 | Step-by-Step Tutorial
 https://www.youtube.com/watch?v=nQdyiK7-VlQ
 
