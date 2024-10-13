@@ -50,16 +50,22 @@ app.post('/api/query-area', async (req, res) => {
     const { area } = req.body;
   
     try {
-        const query = `
+      const query = `
         SELECT title, price, odometer, added, updated 
         FROM listings 
-        WHERE make = 'ford' 
-          AND model ILIKE '%f150%' 
-          AND drive = '4wd' 
-          AND CAST(year AS INTEGER) BETWEEN 2001 AND 2003
+        WHERE make = 'subaru' 
+          AND model = 'outback'
+          AND (body ILIKE '%6%' OR 
+              body ILIKE '%6cyl%' OR 
+              body ILIKE '%6 cyl%' OR 
+              body ILIKE '%6cylinder%' OR 
+              body ILIKE '%6 cylinder%' OR 
+              cylinders = '6 cylinders')
+          AND CAST(year AS INTEGER) BETWEEN 2001 AND 2010
           AND updated != 'not updated yet' 
         LIMIT 100;
         `;
+
       //const values = [area];
   
       const result = await pool.query(query) // No need for 'values' array. , values);
