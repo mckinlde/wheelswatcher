@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import './App.css';
 import carData from './makemodel.json'; // Assuming JSON is stored locally
 import axios from 'axios'; // query the backend
-import PriceDurationGraph from './PriceDurationGraph'; // Import the new component
+import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
+
 
 // Example data structure of states and areas
 const statesAndAreas = {
@@ -182,11 +183,13 @@ function App() {
         </form>
 
 
-        {/* Render the PriceDurationGraph component only if listings data is available */}
+        {/* Render the graphs if results are available */}
         {results.length > 0 && (
-          <div className="graph-section">
+          <>
             <PriceDurationGraph listings={results} />
-          </div>
+            <PriceOdometerGraph listings={results} />
+            <OdometerTimeGraph listings={results} />
+          </>
         )}
 
         {/* Display results in a table */}
