@@ -144,3 +144,21 @@ form {
   font-size: 16px;
   color: white; /* Ensure the text is visible on the background */
 }
+
+
+/* Styles for the graph container */
+.graph-container {
+  margin: 20px auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  background-color: rgba(255, 255, 255, 0.1); /* Match form background */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.graph-section {
+  margin-top: 20px;
+  width: 100%;
+}
+

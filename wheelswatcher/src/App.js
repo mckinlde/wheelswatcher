@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import carData from './makemodel.json'; // Assuming JSON is stored locally
-
-// todo: query the backend
-import axios from 'axios';
+import axios from 'axios'; // query the backend
+import PriceDurationGraph from './PriceDurationGraph'; // Import the new component
 
 
 
@@ -56,15 +55,8 @@ function App() {
     <div className="App">
       <header className="App-header">
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
-        <p>
-          Select an area, make, and model to see the cars that have sold.
-        </p>
-        <a
-          className="App-link"
-          href="mailto:cadocary@gmail.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <p>Select an area to see the car listings and their price vs duration graph.</p>
+        <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
           Contact
         </a>
 
@@ -111,6 +103,13 @@ function App() {
         </form>
         {/* End of Enhanced Dropdown Form */}
 
+
+        {/* Render the PriceDurationGraph component only if listings data is available */}
+        {listings.length > 0 && (
+          <div className="graph-section">
+            <PriceDurationGraph listings={listings} />
+          </div>
+        )}
 
         {/* Display results in a table */}
         {results.length > 0 && (
