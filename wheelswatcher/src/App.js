@@ -54,7 +54,7 @@ function App() {
           <p>I have a database of cars that have already sold, and cars that are currently available.</p>
           <p>First, I'm going to select the cars that have already sold; it'll be 2001-2010 Subaru Outbacks with the 6-cylinder engine.</p>
           <p>I'll show the results with the price, year, odometer, and how long the listing was up before being sold in a table so you can see the data.</p>
-          <p>Then I'll show three 2D graphs and one 3D graph of the price vs odometer vs days listed.</p>
+          <p>Then I'll show graphs of the price vs odometer vs days listed, so you can easily picture what the good deals are.</p>
           <p>Finally, I'll check the database again and show you all of the similar 6cyl '01-'10 Subaru Outbacks currently available in WA, with links to the ads.</p>
         </div>
 
@@ -79,13 +79,9 @@ function App() {
               <tbody>
                 {results.map((car, index) => (
                   <tr key={index}>
-                    <h2>Price vs Days Listed</h2>
                     <td>{car.price}</td>
-                    <h2>Price vs Odometer</h2>
                     <td>{car.odometer}</td>
-                    <h2>Odometer vs Days Listed</h2>
                     <td>{car.year}</td>
-                    <h2>3D Price vs Odometer & Days Listed</h2>
                     <td>{car.title}</td>
                   </tr>
                 ))}
@@ -97,9 +93,13 @@ function App() {
         {/* Render the graphs if results are available */}
         {results.length > 0 && (
           <>
+            <h2>Price vs Days Listed</h2>
             <PriceDurationGraph listings={results} />
+            <h2>Price vs Odometer</h2>
             <PriceOdometerGraph listings={results} />
+            <h2>Odometer vs Days Listed</h2>
             <OdometerTimeGraph listings={results} />
+            <h2>3D Price vs Odometer & Days Listed</h2>
             <PriceOdometerTime3DGraph listings={results} />
           </>
         )}
