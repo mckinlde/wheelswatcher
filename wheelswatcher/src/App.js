@@ -50,11 +50,13 @@ function App() {
             Contact
           </a>
         </p>
-        <p>I have a database of cars that have already sold, and cars that are currently avaliable</p>
-        <p>First, I'm going to select the cars that have already sold; it'll be 2001-2010 Subaru Outbacks with the 6 cylinder engine.</p>
-        <p>I'll show the results with the price, year, odometer, and how long the listing was up before being sold in a table so you can see the data.</p>
-        <p>Then I'll show three 2-d graphs and one 3-d graph of the price v odometer v days listed.</p>
-        <p>Finally, I'll check the database again, and show you all of the similar 6cyl '01-'10 Subaru Outbacks that are currently avaliable in WA, with a link to the Ads.</p>
+        <div className="intro-box">
+          <p>I have a database of cars that have already sold, and cars that are currently available.</p>
+          <p>First, I'm going to select the cars that have already sold; it'll be 2001-2010 Subaru Outbacks with the 6-cylinder engine.</p>
+          <p>I'll show the results with the price, year, odometer, and how long the listing was up before being sold in a table so you can see the data.</p>
+          <p>Then I'll show three 2D graphs and one 3D graph of the price vs odometer vs days listed.</p>
+          <p>Finally, I'll check the database again and show you all of the similar 6cyl '01-'10 Subaru Outbacks currently available in WA, with links to the ads.</p>
+        </div>
 
         {/* Button to trigger fetch */}
         <button onClick={handleSubmit} className="submit-button">
@@ -77,9 +79,13 @@ function App() {
               <tbody>
                 {results.map((car, index) => (
                   <tr key={index}>
+                    <h2>Price vs Days Listed</h2>
                     <td>{car.price}</td>
+                    <h2>Price vs Odometer</h2>
                     <td>{car.odometer}</td>
+                    <h2>Odometer vs Days Listed</h2>
                     <td>{car.year}</td>
+                    <h2>3D Price vs Odometer & Days Listed</h2>
                     <td>{car.title}</td>
                   </tr>
                 ))}

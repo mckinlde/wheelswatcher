@@ -38,6 +38,16 @@
   }
 }
 
+.intro-box {
+  background-color: #f9f9f9;  /* Light background color */
+  border: 1px solid #ccc;  /* Light gray border */
+  padding: 20px;  /* Space inside the box */
+  margin-bottom: 20px;  /* Space below the box */
+  text-align: left;  /* Left-align the text */
+  border-radius: 8px;  /* Rounded corners */
+  max-width: 800px;  /* Optional: limit the width for readability */
+}
+
 /* New styles for the dropdown and form */
 
 .dropdown-form {
@@ -161,4 +171,5 @@ form {
   margin-top: 20px;
   width: 100%;
 }
+
 
