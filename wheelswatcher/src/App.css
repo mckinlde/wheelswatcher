@@ -39,13 +39,13 @@
 }
 
 .intro-box {
-  background-color: #f9f9f9;  /* Light background color */
-  border: 1px solid #ccc;  /* Light gray border */
+  background-color: #1e1e1e;  /* Dark background to match the app */
+  border: 1px solid #444;  /* Subtle border for contrast */
   padding: 20px;  /* Space inside the box */
   margin-bottom: 20px;  /* Space below the box */
   text-align: left;  /* Left-align the text */
   border-radius: 8px;  /* Rounded corners */
-  max-width: 800px;  /* Optional: limit the width for readability */
+  color: #fff;  /* Light text for contrast */
 }
 
 /* New styles for the dropdown and form */
