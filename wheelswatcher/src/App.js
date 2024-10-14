@@ -4,8 +4,6 @@ import carData from './makemodel.json'; // Assuming JSON is stored locally
 import axios from 'axios'; // query the backend
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
 import PriceOdometerTime3DGraph from './PriceOdometerTime3DGraph';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLink } from '@fortawesome/free-solid-svg-icons';
 
 function App() {
   const [results, setResults] = useState([]); // To store the query results of sold cars
@@ -127,7 +125,7 @@ function App() {
                     <td>{car.title}</td>
                     <td>
                       <a href={car.url} target="_blank" rel="noopener noreferrer">
-                        <FontAwesomeIcon icon={faLink} />  {/* Font Awesome icon */}
+                        🔗 {/* Unicode link symbol */}
                       </a>
                     </td>
                   </tr>
