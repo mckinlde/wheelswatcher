@@ -45,27 +45,23 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Push the button to see Subaru's!</p>
-        <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
-          Contact
-        </a>
+        <p>
+          <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
+            Contact
+          </a>
+        </p>
+        <p>I have a database of cars that have already sold, and cars that are currently avaliable</p>
+        <p>First, I'm going to select the cars that have already sold; it'll be 2001-2010 Subaru Outbacks with the 6 cylinder engine.</p>
+        <p>I'll show the results with the price, year, odometer, and how long the listing was up before being sold in a table so you can see the data.</p>
+        <p>Then I'll show three 2-d graphs and one 3-d graph of the price v odometer v days listed.</p>
+        <p>Finally, I'll check the database again, and show you all of the similar 6cyl '01-'10 Subaru Outbacks that are currently avaliable in WA, with a link to the Ads.</p>
 
         {/* Button to trigger fetch */}
         <button onClick={handleSubmit} className="submit-button">
-          Push Button to see Subaru's
+          See Subaru's
         </button>
 
-        {/* Render the graphs if results are available */}
-        {results.length > 0 && (
-          <>
-            <PriceDurationGraph listings={results} />
-            <PriceOdometerGraph listings={results} />
-            <OdometerTimeGraph listings={results} />
-            <PriceOdometerTime3DGraph listings={results} />
-          </>
-        )}
-
-        {/* Display results in a table */}
+        {/* Display sold cars in a table */}
         {results.length > 0 && (
           <div className="table-container">
             <h2>Cars Sold in the past, the Input Data to the Graphs</h2>
@@ -90,6 +86,16 @@ function App() {
               </tbody>
             </table>
           </div>
+        )}
+
+        {/* Render the graphs if results are available */}
+        {results.length > 0 && (
+          <>
+            <PriceDurationGraph listings={results} />
+            <PriceOdometerGraph listings={results} />
+            <OdometerTimeGraph listings={results} />
+            <PriceOdometerTime3DGraph listings={results} />
+          </>
         )}
 
         {/* Display unsold cars in a table */}
