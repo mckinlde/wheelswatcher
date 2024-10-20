@@ -170,6 +170,8 @@ function App() {
           {/* Render the graphs if results are available */}
           {results.length > 0 && (
             <>
+            <p>Here are graphs of the cars above, which have already sold. By "Days Listed", we mean how long the listing was up before the car sold and the seller removed the listing.</p>
+            <p>Tip: you can click the points to see precise numbers for that point!</p>
               <h2>Price vs Days Listed</h2>
               <PriceDurationGraph listings={results} />
               <h2>Price vs Odometer</h2>
