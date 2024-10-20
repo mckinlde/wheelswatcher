@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
-import axios from 'axios'; // For querying the backend
+import carData from './makemodel.json'; // Assuming JSON is stored locally
+import axios from 'axios'; // query the backend
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
 import PriceOdometerTime3DGraph from './PriceOdometerTime3DGraph';
 
@@ -14,9 +15,15 @@ function App() {
   const [unsoldCars, setUnsoldCars] = useState([]);  // To store the unsold Subaru cars
 
   // Fetch unsold cars after submit
-  const fetchUnsoldCars = async (formData) => {
+  const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
     try {
-      const response = await axios.post('https://carsalesignal.com/api/unsold-parameterized', formData);
+      const response = await axios.post('https://carsalesignal.com/api/unsold-parameterized', {
+        make,
+        model,
+        startYear,
+        endYear,
+        bodyTerms: bodyTermsArray
+      });
       console.log('Unsold Query Result:', response.data);
       setUnsoldCars(best_deal(response.data));  // Sort by best_deal
     } catch (error) {
@@ -26,27 +33,19 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Split the comma-separated bodyTerms string into an array of strings
-    const bodyTermsArray = bodyTerms ? bodyTerms.split(',').map(term => term.trim()) : [];
-
-    // Form data to send to the backend
-    const formData = {
-      make,
-      model,
-      startYear: parseInt(startYear),
-      endYear: parseInt(endYear),
-      bodyTerms: bodyTermsArray
-    };
-
+    const bodyTermsArray = bodyTerms.split(',').map(term => term.trim()).filter(term => term);
+    
     try {
-      // Send request to the sold cars endpoint
-      const response = await axios.post('https://carsalesignal.com/api/sold-parameterized', formData);
+      const response = await axios.post('https://carsalesignal.com/api/sold-parameterized', {
+        make,
+        model,
+        startYear,
+        endYear,
+        bodyTerms: bodyTermsArray
+      });
       console.log('Sold Query Result:', response.data);
       setResults(response.data); // Set the response data into state
-
-      // Fetch unsold cars after sold cars
-      fetchUnsoldCars(formData);
+      fetchUnsoldCars(make, model, startYear, endYear, bodyTermsArray);  // Fetch unsold cars after sold cars
     } catch (error) {
       console.error('Error querying the database:', error);
     }
@@ -63,122 +62,152 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
-            Contact
-          </a>
-        </p>
-        <div className="intro-box">
-          <p>I have a database of cars that have already sold, and cars that are currently available.</p>
-          <p>First, I'm going to select the cars that have already sold; it'll be 2001-2010 Subaru Outbacks with the 6-cylinder engine.</p>
-          <p>I'll show the results with the price, year, odometer, and how long the listing was up before being sold in a table so you can see the data.</p>
-          <p>Then I'll show graphs of the price vs odometer vs days listed, so you can easily picture what the good deals are.</p>
-          <p>Finally, I'll check the database again and show you all of the similar 6cyl '01-'10 Subaru Outbacks currently available in WA, with links to the ads.</p>
-        </div>
-
-        {/* Form to input make, model, year, and body terms */}
-        <form onSubmit={handleSubmit} className="car-search-form">
-          <label>
-            Make:
-            <input type="text" value={make} onChange={(e) => setMake(e.target.value)} />
-          </label>
-          <label>
-            Model:
-            <input type="text" value={model} onChange={(e) => setModel(e.target.value)} />
-          </label>
-          <label>
-            Start Year:
-            <input type="number" value={startYear} onChange={(e) => setStartYear(e.target.value)} />
-          </label>
-          <label>
-            End Year:
-            <input type="number" value={endYear} onChange={(e) => setEndYear(e.target.value)} />
-          </label>
-          <label>
-            Search Terms (comma-separated):
-            <input type="text" value={bodyTerms} onChange={(e) => setBodyTerms(e.target.value)} placeholder="e.g., 6cyl, 6 cylinder" />
-          </label>
-
-          <button type="submit" className="submit-button">
-            See Subaru's
-          </button>
-        </form>
-
-        {/* Display sold cars in a table */}
-        {results.length > 0 && (
-          <div className="table-container">
-            <h2>Cars Sold in the past, the Input Data to the Graphs</h2>
-            <table className="results-table">
-              <thead>
-                <tr>
-                  <th>Price</th>
-                  <th>Odometer</th>
-                  <th>Year</th>
-                  <th>Title</th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((car, index) => (
-                  <tr key={index}>
-                    <td>{car.price}</td>
-                    <td>{car.odometer}</td>
-                    <td>{car.year}</td>
-                    <td>{car.title}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+      <div className="container">
+        <header className="App-header">
+          <p>
+            <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
+              Contact
+            </a>
+          </p>
+          <div className="intro-box">
+            <p>Welcome to the car listings database. You can now search for cars by customizing the make, model, year range, and specific keywords you'd like to search for in the description. By default, it pulls 2001-2010 Subaru Outbacks with a 6-cylinder engine, but you can now specify other options!</p>
+            <p>The form below allows you to input custom parameters for make, model, year range, and a list of terms (like '6cyl', 'AWD') to search in the car descriptions. If no terms are provided, it will ignore that part of the query.</p>
+            <p>Once submitted, you'll see sold cars with price, year, and odometer data along with their time on the market. Then, we'll also show cars currently available in Washington, based on the same criteria.</p>
           </div>
-        )}
 
-        {/* Render the graphs if results are available */}
-        {results.length > 0 && (
-          <>
-            <h2>Price vs Days Listed</h2>
-            <PriceDurationGraph listings={results} />
-            <h2>Price vs Odometer</h2>
-            <PriceOdometerGraph listings={results} />
-            <h2>Odometer vs Days Listed</h2>
-            <OdometerTimeGraph listings={results} />
-            <h2>3D Price vs Odometer & Days Listed</h2>
-            <PriceOdometerTime3DGraph listings={results} />
-          </>
-        )}
+          {/* Form to customize the query */}
+          <form onSubmit={handleSubmit} className="search-form">
+            <label className="form-label">
+              Make:
+              <input 
+                type="text" 
+                value={make} 
+                onChange={(e) => setMake(e.target.value)} 
+                className="form-input" 
+              />
+            </label>
 
-        {/* Display unsold cars in a table */}
-        {unsoldCars.length > 0 && (
-          <div className="table-container">
-            <h2>Cars Available in WA</h2>
-            <table className="results-table">
-              <thead>
-                <tr>
-                  <th>Price</th>
-                  <th>Odometer</th>
-                  <th>Year</th>
-                  <th>Title</th>
-                  <th>Link</th>  {/* New link column */}
-                </tr>
-              </thead>
-              <tbody>
-                {unsoldCars.map((car, index) => (
-                  <tr key={index}>
-                    <td>{car.price}</td>
-                    <td>{car.odometer}</td>
-                    <td>{car.year}</td>
-                    <td>{car.title}</td>
-                    <td>
-                      <a href={car.url} target="_blank" rel="noopener noreferrer">
-                        🔗 {/* Unicode link symbol */}
-                      </a>
-                    </td>
+            <label className="form-label">
+              Model:
+              <input 
+                type="text" 
+                value={model} 
+                onChange={(e) => setModel(e.target.value)} 
+                className="form-input" 
+              />
+            </label>
+
+            <label className="form-label">
+              Start Year:
+              <input 
+                type="number" 
+                value={startYear} 
+                onChange={(e) => setStartYear(e.target.value)} 
+                className="form-input" 
+              />
+            </label>
+
+            <label className="form-label">
+              End Year:
+              <input 
+                type="number" 
+                value={endYear} 
+                onChange={(e) => setEndYear(e.target.value)} 
+                className="form-input" 
+              />
+            </label>
+
+            <label className="form-label">
+              Keywords (comma-separated):
+              <input 
+                type="text" 
+                value={bodyTerms} 
+                onChange={(e) => setBodyTerms(e.target.value)} 
+                className="form-input" 
+                placeholder="e.g. AWD, 6cyl"
+              />
+            </label>
+
+            <button type="submit" className="submit-button">
+              Search Cars
+            </button>
+          </form>
+
+          {/* Display sold cars in a table */}
+          {results.length > 0 && (
+            <div className="table-container">
+              <h2>Cars Sold in the past, the Input Data to the Graphs</h2>
+              <table className="results-table">
+                <thead>
+                  <tr>
+                    <th>Price</th>
+                    <th>Odometer</th>
+                    <th>Year</th>
+                    <th>Title</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </header>
+                </thead>
+                <tbody>
+                  {results.map((car, index) => (
+                    <tr key={index}>
+                      <td>{car.price}</td>
+                      <td>{car.odometer}</td>
+                      <td>{car.year}</td>
+                      <td>{car.title}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Render the graphs if results are available */}
+          {results.length > 0 && (
+            <>
+              <h2>Price vs Days Listed</h2>
+              <PriceDurationGraph listings={results} />
+              <h2>Price vs Odometer</h2>
+              <PriceOdometerGraph listings={results} />
+              <h2>Odometer vs Days Listed</h2>
+              <OdometerTimeGraph listings={results} />
+              <h2>3D Price vs Odometer & Days Listed</h2>
+              <PriceOdometerTime3DGraph listings={results} />
+            </>
+          )}
+
+          {/* Display unsold cars in a table */}
+          {unsoldCars.length > 0 && (
+            <div className="table-container">
+              <h2>Cars Available in WA</h2>
+              <table className="results-table">
+                <thead>
+                  <tr>
+                    <th>Price</th>
+                    <th>Odometer</th>
+                    <th>Year</th>
+                    <th>Title</th>
+                    <th>Link</th>  {/* New link column */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {unsoldCars.map((car, index) => (
+                    <tr key={index}>
+                      <td>{car.price}</td>
+                      <td>{car.odometer}</td>
+                      <td>{car.year}</td>
+                      <td>{car.title}</td>
+                      <td>
+                        <a href={car.url} target="_blank" rel="noopener noreferrer">
+                          🔗 {/* Unicode link symbol */}
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </header>
+      </div>{/* Your content here */}
     </div>
   );
 }
