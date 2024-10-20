@@ -10,7 +10,7 @@ function App() {
   const [model, setModel] = useState('outback');
   const [startYear, setStartYear] = useState(2001);
   const [endYear, setEndYear] = useState(2010);
-  const [bodyTerms, setBodyTerms] = useState('');
+  const [bodyTerms, setBodyTerms] = useState('6cyl, 6 cyl, 6cylinder, 6 cylinder');
   const [results, setResults] = useState([]); // To store the query results of sold cars
   const [unsoldCars, setUnsoldCars] = useState([]);  // To store the unsold Subaru cars
 
@@ -129,7 +129,7 @@ function App() {
           </p>
           <div className="intro-box">
             <p>Welcome to the car listings database. You can now search for cars by choosing a make, model, year range, and specific keywords you'd like to search for in the description.</p>
-            <p>The default search is for a 2001-2010 Subaru Outback with a 6cyl engine.</p>
+            <p>The default search is for a 2001-2010 Subaru Outback with a 6 cylinder engine.</p>
           </div>
 
           {/* Form to customize the query */}
@@ -181,7 +181,7 @@ function App() {
                 value={bodyTerms} 
                 onChange={(e) => setBodyTerms(e.target.value)} 
                 className="form-input" 
-                placeholder="e.g. AWD, 6cyl"
+                placeholder={bodyTerms}
               />
             </label>
 
