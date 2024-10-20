@@ -1,225 +1,144 @@
-/* Existing styles from your App.css */
-.App {
+/* General Layout and Utility */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.text-center {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.mt-20 {
+  margin-top: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.mb-20 {
+  margin-bottom: 20px;
 }
 
+/* Header styles */
 .App-header {
   background-color: #282c34;
+  color: white;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 20px;
+}
+
+.intro-box {
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  color: #fff;
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.intro-box {
-  background-color: #1e1e1e;  /* Dark background to match the app */
-  border: 1px solid #444;  /* Subtle border for contrast */
-  padding: 20px;  /* Space inside the box */
-  margin-bottom: 20px;  /* Space below the box */
-  text-align: left;  /* Left-align the text */
-  border-radius: 8px;  /* Rounded corners */
-  color: #fff;  /* Light text for contrast */
-}
-
-/* New styles for the dropdown and form */
-
-.dropdown-form {
+/* Form styles */
+.search-form {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1rem;
-  padding: 1rem;
   background-color: rgba(255, 255, 255, 0.1);
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
 }
 
-.dropdown-label {
+.form-label {
   font-size: 1.2rem;
   color: #61dafb;
   font-weight: bold;
-  margin-bottom: 0.5rem;
 }
 
-.dropdown {
-  width: 200px;
+.form-input {
   padding: 0.5rem;
   font-size: 1rem;
   border-radius: 5px;
   border: 2px solid #61dafb;
   background-color: #282c34;
   color: white;
-  text-align: center;
-  cursor: pointer;
-}
-
-.dropdown option {
-  background-color: #282c34;
-  color: white;
-}
-
-.submit-button {
-  background-color: #61dafb;
-  color: white;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.submit-button:hover {
-  background-color: #21a1f1;
-}
-
-form {
-  margin: 2rem 0;
-}
-
-/*  More styles for the table  */
-/* Center the table within a box */
-.table-container {
-  margin: 20px auto;
-  padding: 20px;
-  width: 80%;
-  max-width: 800px;
-  background-color: rgba(255, 255, 255, 0.1); /* Match the form background */
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Style the table */
-.results-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.results-table th, .results-table td {
-  border: 1px solid #ddd;
-  padding: 12px;
-  text-align: left;
-}
-
-/* Align price column to the left */
-.results-table td:first-child {
-  text-align: left;
-  font-weight: bold;
-}
-
-/* Header styling */
-.results-table th {
-  background-color: #4CAF50;
-  color: white;
-  padding: 14px;
-  text-align: left;
-}
-
-/* Row hover effect */
-.results-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.2); /* Slightly darker hover effect */
-}
-
-/* Table content styling */
-.results-table td {
-  padding: 12px;
-  font-size: 16px;
-  color: white; /* Ensure the text is visible on the background */
-}
-
-
-/* Styles for the graph container */
-.graph-container {
-  margin: 20px auto;
-  padding: 20px;
-  width: 80%;
-  max-width: 800px;
-  background-color: rgba(255, 255, 255, 0.1); /* Match form background */
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.graph-section {
-  margin-top: 20px;
-  width: 100%;
-}
-
-/* Container to hold the entire app's content and make it responsive */
-.container {
-  max-width: 100%;  /* Ensure the container never exceeds the screen width */
-  width: 100%;      /* Make the container take up 100% of the available width */
-  padding: 20px;    /* Add padding around the content */
-  margin: 0 auto;   /* Center the container */
-  box-sizing: border-box;
-}
-
-/* Make tables and graphs responsive */
-.table-container {
-  overflow-x: auto;  /* Allow horizontal scrolling for tables on smaller screens */
-}
-
-.results-table {
-  width: 100%;       /* Ensure the table takes up 100% of the container */
-  border-collapse: collapse;
-}
-
-.results-table th, .results-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
 }
 
 .submit-button {
   background-color: #007bff;
   color: white;
-  padding: 10px 20px;
+  padding: 10px;
   border: none;
-  margin: 20px 0;
+  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  width: 100%;      /* Button takes full width on smaller screens */
-  max-width: 300px; /* Limit the width on larger screens */
 }
 
 .submit-button:hover {
   background-color: #0056b3;
 }
 
+/* Table styles */
+.table-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th, .results-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.results-table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.results-table td:first-child {
+  text-align: left;
+  font-weight: bold;
+}
+
+.results-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Graph container styles */
+.graph-container {
+  margin: 20px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  width: 100%;
+  max-width: 800px;
+}
+
+/* Responsive design */
 @media (max-width: 768px) {
   .container {
-    padding: 10px;  /* Reduce padding on smaller screens */
+    padding: 10px;
   }
 
   .results-table th, .results-table td {
-    padding: 8px;   /* Adjust padding for smaller screens */
+    padding: 8px;
+  }
+
+  .submit-button {
+    width: 100%;
   }
 }
-

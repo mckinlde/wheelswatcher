@@ -68,7 +68,6 @@ function App() {
     });
   }
 
-
   return (
     <div className="App">
       <div className="container">
@@ -79,9 +78,8 @@ function App() {
             </a>
           </p>
           <div className="intro-box">
-            <p>Welcome to the car listings database. You can now search for cars by choosing a make, model, year range, and specific keywords you'd like to search for in the description. By default, it pulls 2001-2010 Subaru Outbacks with a 6-cylinder engine, but you can specify other options!</p>
-            <p>The form below allows you to input custom parameters for make, model, year range, and a list of terms (like '6cyl', 'AWD') to search in the car descriptions. If you provide terms, it will only include listings where the terms appear in the listing description.  To provide multiple terms, separate, them, with, commas</p>
-            <p>Once submitted, you'll see sold cars with price, year, and odometer data along with their time on the market. Then, we'll also show cars currently available in Washington, based on the same criteria.</p>
+            <p>Welcome to the car listings database. You can now search for cars by choosing a make, model, year range, and specific keywords you'd like to search for in the description.</p>
+            <p>The default search is for a 2001-2010 Subaru Outback with a 6cyl engine.</p>
           </div>
 
           {/* Form to customize the query */}
@@ -145,7 +143,7 @@ function App() {
           {/* Display sold cars in a table */}
           {results.length > 0 && (
             <div className="table-container">
-              <h2>Cars Sold in the past, the Input Data to the Graphs</h2>
+              <h2>Cars Sold in the past</h2>
               <table className="results-table">
                 <thead>
                   <tr>
@@ -170,9 +168,6 @@ function App() {
           )}
 
           {/* Render the graphs if results are available */}
-          <div className="intro-box">
-            <p>Here are graphs of the cars above, which have already sold.  By "Days Listed", we mean how long the listing was up before the car sold and the seller removed the listing.  Protip: you can click the points to see precise numbers for that point!</p>
-          </div>
           {results.length > 0 && (
             <>
               <h2>Price vs Days Listed</h2>
@@ -197,7 +192,7 @@ function App() {
                     <th>Odometer</th>
                     <th>Year</th>
                     <th>Title</th>
-                    <th>Link</th>  {/* New link column */}
+                    <th>Link</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -219,7 +214,7 @@ function App() {
             </div>
           )}
         </header>
-      </div>{/* Your content here */}
+      </div>
     </div>
   );
 }
