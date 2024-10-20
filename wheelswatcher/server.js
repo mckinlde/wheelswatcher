@@ -55,8 +55,7 @@ app.post('/api/unsold-dreams', async (req, res) => {
       FROM listings 
       WHERE make = 'subaru' 
         AND model = 'outback'
-        AND (posting_body ILIKE '%6%' OR 
-            posting_body ILIKE '%6cyl%' OR 
+        AND (posting_body ILIKE '%6cyl%' OR 
             posting_body ILIKE '%6 cyl%' OR 
             posting_body ILIKE '%6cylinder%' OR 
             posting_body ILIKE '%6 cylinder%' OR 
@@ -87,8 +86,7 @@ app.post('/api/sold-dreams', async (req, res) => {
         FROM listings 
         WHERE make = 'subaru' 
           AND model = 'outback'
-          AND (posting_body ILIKE '%6%' OR 
-              posting_body ILIKE '%6cyl%' OR 
+          AND (posting_body ILIKE '%6cyl%' OR 
               posting_body ILIKE '%6 cyl%' OR 
               posting_body ILIKE '%6cylinder%' OR 
               posting_body ILIKE '%6 cylinder%' OR 
