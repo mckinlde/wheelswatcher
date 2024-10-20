@@ -107,6 +107,98 @@ app.post('/api/sold-dreams', async (req, res) => {
   });
 
 
+// Endpoint to run a SELECT query for unsold parameterized
+app.post('/api/unsold-parameterized', async (req, res) => {
+  const { area, make, model, startYear, endYear, bodyTerms } = req.body;
+
+  try {
+    // Base query without body terms
+    let query = `
+      SELECT title, price, year, odometer, url 
+      FROM listings 
+      WHERE make = $1 
+        AND model = $2
+        AND CAST(year AS INTEGER) BETWEEN $3 AND $4
+        AND updated = 'not updated yet'
+        AND area IN ('bellingham', 'kpr', 'moseslake', 'olympic', 'pullman', 'seattle', 'skagit', 'spokane', 'wenatchee', 'yakima')
+    `;
+
+    // Array of values to pass to the query
+    const queryParams = [make, model, startYear, endYear];
+
+    // Dynamically add body search conditions if bodyTerms is passed and is not empty
+    if (bodyTerms && bodyTerms.length > 0) {
+      const bodyConditions = bodyTerms
+        .map((_, index) => `posting_body ILIKE $${queryParams.length + index + 1}`)
+        .join(' OR ');
+
+      // Add the body search conditions to the query
+      query += ` AND (${bodyConditions})`;
+
+      // Add each body term to queryParams
+      bodyTerms.forEach(term => {
+        queryParams.push(`%${term}%`);
+      });
+    }
+
+    // Add limit to the query
+    query += ` LIMIT 100;`;
+
+    // Execute the query with the parameterized values
+    const result = await pool.query(query, queryParams);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.status(500).json({ error: 'Database query failed' });
+  }
+});
+
+// Endpoint to run a SELECT query based on the sold parameterized
+app.post('/api/sold-parameterized', async (req, res) => {
+  const { area, make, model, startYear, endYear, bodyTerms } = req.body;
+
+  try {
+    // Base query without body terms
+    let query = `
+      SELECT title, price, year, odometer, added, updated 
+      FROM listings 
+      WHERE make = $1 
+        AND model = $2
+        AND CAST(year AS INTEGER) BETWEEN $3 AND $4
+        AND updated != 'not updated yet'
+    `;
+
+    // Array of values to pass to the query
+    const queryParams = [make, model, startYear, endYear];
+
+    // Dynamically add body search conditions if bodyTerms is passed and is not empty
+    if (bodyTerms && bodyTerms.length > 0) {
+      const bodyConditions = bodyTerms
+        .map((_, index) => `posting_body ILIKE $${queryParams.length + index + 1}`)
+        .join(' OR ');
+
+      // Add the body search conditions to the query
+      query += ` AND (${bodyConditions})`;
+
+      // Add each body term to queryParams
+      bodyTerms.forEach(term => {
+        queryParams.push(`%${term}%`);
+      });
+    }
+
+    // Add limit to the query
+    query += ` LIMIT 100;`;
+
+    // Execute the query with the parameterized values
+    const result = await pool.query(query, queryParams);
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Error executing query', err);
+    res.status(500).json({ error: 'Database query failed' });
+  }
+});
+
+
 // Add this route to handle the health check
 app.get('/api/health-check', (req, res) => {
     res.status(200).send('API is healthy');
