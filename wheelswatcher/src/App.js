@@ -33,23 +33,31 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const bodyTermsArray = bodyTerms.split(',').map(term => term.trim()).filter(term => term);
+    
+    // Ensure all input terms are lowercased
+    const lowercasedMake = make.toLowerCase();
+    const lowercasedModel = model.toLowerCase();
+    const bodyTermsArray = bodyTerms.split(',')
+      .map(term => term.trim().toLowerCase())  // Lowercase each term
+      .filter(term => term);  // Filter out empty terms
     
     try {
       const response = await axios.post('https://carsalesignal.com/api/sold-parameterized', {
-        make,
-        model,
+        make: lowercasedMake,
+        model: lowercasedModel,
         startYear,
         endYear,
         bodyTerms: bodyTermsArray
       });
       console.log('Sold Query Result:', response.data);
       setResults(response.data); // Set the response data into state
-      fetchUnsoldCars(make, model, startYear, endYear, bodyTermsArray);  // Fetch unsold cars after sold cars
+      
+      // Fetch unsold cars after sold cars
+      fetchUnsoldCars(lowercasedMake, lowercasedModel, startYear, endYear, bodyTermsArray);
     } catch (error) {
       console.error('Error querying the database:', error);
     }
-  };
+  };  
 
   // Define a function that scores the cars based on price, odometer, and year
   function best_deal(cars) {
