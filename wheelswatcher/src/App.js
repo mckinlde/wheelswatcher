@@ -65,33 +65,6 @@ function App() {
    * normalize each of these values before applying the weights. Normalization typically 
    * involves scaling each value relative to its minimum and maximum values across the 
    * dataset. A common approach is to normalize a value x using the formula:
-   */
-  // Define a function that scores the cars based on normalized price, odometer, and year
-  function best_deal(cars) {
-    // Find the min and max for each attribute
-    const priceMin = Math.min(...cars.map(car => car.price));
-    const priceMax = Math.max(...cars.map(car => car.price));
-    
-    const odometerMin = Math.min(...cars.map(car => car.odometer));
-    const odometerMax = Math.max(...cars.map(car => car.odometer));
-    
-    const yearMin = Math.min(...cars.map(car => car.year));
-    const yearMax = Math.max(...cars.map(car => car.year));
-
-    // Normalize the values and apply the score
-    return cars.sort((a, b) => {
-      const normalizedPriceA = (a.price - priceMin) / (priceMax - priceMin);
-      const normalizedOdometerA = (a.odometer - odometerMin) / (odometerMax - odometerMin);
-      const normalizedYearA = (a.year - yearMin) / (yearMax - yearMin);
-
-      const normalizedPriceB = (b.price - priceMin) / (priceMax - priceMin);
-      const normalizedOdometerB = (b.odometer - odometerMin) / (odometerMax - odometerMin);
-      const normalizedYearB = (b.year - yearMin) / (yearMax - yearMin);
-
-      // Apply the weights to the normalized values
-      const scoreA = normalizedPriceA * 0.4 + normalizedOdometerA * 0.3 - normalizedYearA * 0.3;
-      const scoreB = normalizedPriceB * 0.4 + normalizedOdometerB * 0.3 - normalizedYearB * 0.3;
-      /**
        * Scoring Logic:
        * The formula is constructed as:
        * normalizedPriceA * 0.4: This means that lower price results in a lower score 
@@ -108,10 +81,41 @@ function App() {
        * Since the formula is designed so that a lower price, lower odometer, and higher year result in a lower 
        * score, the car that best meets your criteria (lowest price, lowest odometer, highest year) will appear 
        * first.
-       */
+   */
+  // Define a function that scores the cars based on normalized price, odometer, and year
+  function best_deal(cars) {
+    // Find the min and max for each attribute
+    const priceMin = Math.min(...cars.map(car => car.price));
+    const priceMax = Math.max(...cars.map(car => car.price));
+    
+    const odometerMin = Math.min(...cars.map(car => car.odometer));
+    const odometerMax = Math.max(...cars.map(car => car.odometer));
+    
+    const yearMin = Math.min(...cars.map(car => car.year));
+    const yearMax = Math.max(...cars.map(car => car.year));
+  
+    // Normalize the values and apply the score
+    return cars.sort((a, b) => {
+      const normalizedPriceA = (a.price - priceMin) / (priceMax - priceMin || 1); // Prevent division by zero
+      const normalizedOdometerA = (a.odometer - odometerMin) / (odometerMax - odometerMin || 1);
+      const normalizedYearA = (a.year - yearMin) / (yearMax - yearMin || 1);
+  
+      const normalizedPriceB = (b.price - priceMin) / (priceMax - priceMin || 1);
+      const normalizedOdometerB = (b.odometer - odometerMin) / (odometerMax - odometerMin || 1);
+      const normalizedYearB = (b.year - yearMin) / (yearMax - yearMin || 1);
+  
+      // Apply the weights to the normalized values
+      const scoreA = normalizedPriceA * 0.4 + normalizedOdometerA * 0.3 - normalizedYearA * 0.3;
+      const scoreB = normalizedPriceB * 0.4 + normalizedOdometerB * 0.3 - normalizedYearB * 0.3;
+  
+      // Debugging output to compare the scores
+      console.log(`Car A: Price=${a.price}, Odometer=${a.odometer}, Year=${a.year}, Score=${scoreA}`);
+      console.log(`Car B: Price=${b.price}, Odometer=${b.odometer}, Year=${b.year}, Score=${scoreB}`);
+  
       return scoreA - scoreB;  // Sort in ascending order (best deal first)
     });
   }
+  
 
 
   return (
