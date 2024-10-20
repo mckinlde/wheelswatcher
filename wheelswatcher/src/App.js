@@ -60,13 +60,59 @@ function App() {
   };  
 
   // Define a function that scores the cars based on price, odometer, and year
+  /**
+   * To address the imbalance in the scales between price, odometer, and year, we can 
+   * normalize each of these values before applying the weights. Normalization typically 
+   * involves scaling each value relative to its minimum and maximum values across the 
+   * dataset. A common approach is to normalize a value x using the formula:
+   */
+  // Define a function that scores the cars based on normalized price, odometer, and year
   function best_deal(cars) {
+    // Find the min and max for each attribute
+    const priceMin = Math.min(...cars.map(car => car.price));
+    const priceMax = Math.max(...cars.map(car => car.price));
+    
+    const odometerMin = Math.min(...cars.map(car => car.odometer));
+    const odometerMax = Math.max(...cars.map(car => car.odometer));
+    
+    const yearMin = Math.min(...cars.map(car => car.year));
+    const yearMax = Math.max(...cars.map(car => car.year));
+
+    // Normalize the values and apply the score
     return cars.sort((a, b) => {
-      const scoreA = a.price * 0.4 + a.odometer * 0.3 - a.year * 0.3;
-      const scoreB = b.price * 0.4 + b.odometer * 0.3 - b.year * 0.3;
+      const normalizedPriceA = (a.price - priceMin) / (priceMax - priceMin);
+      const normalizedOdometerA = (a.odometer - odometerMin) / (odometerMax - odometerMin);
+      const normalizedYearA = (a.year - yearMin) / (yearMax - yearMin);
+
+      const normalizedPriceB = (b.price - priceMin) / (priceMax - priceMin);
+      const normalizedOdometerB = (b.odometer - odometerMin) / (odometerMax - odometerMin);
+      const normalizedYearB = (b.year - yearMin) / (yearMax - yearMin);
+
+      // Apply the weights to the normalized values
+      const scoreA = normalizedPriceA * 0.4 + normalizedOdometerA * 0.3 - normalizedYearA * 0.3;
+      const scoreB = normalizedPriceB * 0.4 + normalizedOdometerB * 0.3 - normalizedYearB * 0.3;
+      /**
+       * Scoring Logic:
+       * The formula is constructed as:
+       * normalizedPriceA * 0.4: This means that lower price results in a lower score 
+       * (because a lower normalized price contributes less to the score, which is desired for a "better deal").
+       * normalizedOdometerA * 0.3: Similarly, a lower odometer results in a lower score.
+       * -normalizedYearA * 0.3: This part is negative because you want higher years (i.e., newer cars) to 
+       * result in a lower score. Since year is positive, subtracting its normalized value ensures that newer 
+       * cars get a better score.
+       * 
+       * Sorting Behavior:
+       * The function compares the total score of two cars, scoreA and scoreB, and sorts them in ascending order:
+       * If scoreA is less than scoreB, then car A will be placed before car B in the sorted list 
+       * (because a lower score is considered a better deal).
+       * Since the formula is designed so that a lower price, lower odometer, and higher year result in a lower 
+       * score, the car that best meets your criteria (lowest price, lowest odometer, highest year) will appear 
+       * first.
+       */
       return scoreA - scoreB;  // Sort in ascending order (best deal first)
     });
   }
+
 
   return (
     <div className="App">
