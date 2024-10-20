@@ -84,25 +84,28 @@ function App() {
    */
   // Define a function that scores the cars based on normalized price, odometer, and year
   function best_deal(cars) {
+    // Helper function to strip non-numeric characters from price and convert to integer
+    const parsePrice = (price) => parseInt(price.replace(/[^0-9]/g, ''), 10);
+  
     // Find the min and max for each attribute
-    const priceMin = Math.min(...cars.map(car => car.price));
-    const priceMax = Math.max(...cars.map(car => car.price));
+    const priceMin = Math.min(...cars.map(car => parsePrice(car.price)));
+    const priceMax = Math.max(...cars.map(car => parsePrice(car.price)));
     
-    const odometerMin = Math.min(...cars.map(car => car.odometer));
-    const odometerMax = Math.max(...cars.map(car => car.odometer));
+    const odometerMin = Math.min(...cars.map(car => parseInt(car.odometer, 10)));
+    const odometerMax = Math.max(...cars.map(car => parseInt(car.odometer, 10)));
     
-    const yearMin = Math.min(...cars.map(car => car.year));
-    const yearMax = Math.max(...cars.map(car => car.year));
+    const yearMin = Math.min(...cars.map(car => parseInt(car.year, 10)));
+    const yearMax = Math.max(...cars.map(car => parseInt(car.year, 10)));
   
     // Normalize the values and apply the score
     return cars.sort((a, b) => {
-      const normalizedPriceA = (a.price - priceMin) / (priceMax - priceMin || 1); // Prevent division by zero
-      const normalizedOdometerA = (a.odometer - odometerMin) / (odometerMax - odometerMin || 1);
-      const normalizedYearA = (a.year - yearMin) / (yearMax - yearMin || 1);
+      const normalizedPriceA = (parsePrice(a.price) - priceMin) / (priceMax - priceMin || 1); // Prevent division by zero
+      const normalizedOdometerA = (parseInt(a.odometer, 10) - odometerMin) / (odometerMax - odometerMin || 1);
+      const normalizedYearA = (parseInt(a.year, 10) - yearMin) / (yearMax - yearMin || 1);
   
-      const normalizedPriceB = (b.price - priceMin) / (priceMax - priceMin || 1);
-      const normalizedOdometerB = (b.odometer - odometerMin) / (odometerMax - odometerMin || 1);
-      const normalizedYearB = (b.year - yearMin) / (yearMax - yearMin || 1);
+      const normalizedPriceB = (parsePrice(b.price) - priceMin) / (priceMax - priceMin || 1);
+      const normalizedOdometerB = (parseInt(b.odometer, 10) - odometerMin) / (odometerMax - odometerMin || 1);
+      const normalizedYearB = (parseInt(b.year, 10) - yearMin) / (yearMax - yearMin || 1);
   
       // Apply the weights to the normalized values
       const scoreA = normalizedPriceA * 0.4 + normalizedOdometerA * 0.3 - normalizedYearA * 0.3;
@@ -115,6 +118,7 @@ function App() {
       return scoreA - scoreB;  // Sort in ascending order (best deal first)
     });
   }
+  
   
 
 
@@ -220,7 +224,8 @@ function App() {
           {/* Render the graphs if results are available */}
           {results.length > 0 && (
             <>
-            <p>Here are graphs of the cars above, which have already sold. By "Days Listed", we mean how long the listing was up before the car sold and the seller removed the listing.</p>
+            <p>Here are graphs of the cars above, which have already sold.</p>
+            <p>By "Days Listed", we mean how long the listing was up before the car sold and the seller removed the listing.</p>
             <p>Tip: you can click the points to see precise numbers for that point!</p>
               <h2>Price vs Days Listed</h2>
               <PriceDurationGraph listings={results} />
