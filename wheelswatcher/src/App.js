@@ -109,8 +109,8 @@ function App() {
       const normalizedYearB = (parseInt(b.year, 10) - yearMin) / (yearMax - yearMin || 1);
   
       // Apply the weights to the normalized values
-      const scoreA = normalizedPriceA * 0.4 + normalizedOdometerA * 0.3 - normalizedYearA * 0.3;
-      const scoreB = normalizedPriceB * 0.4 + normalizedOdometerB * 0.3 - normalizedYearB * 0.3;
+      const scoreA = normalizedPriceA * 0.3 + normalizedOdometerA * 0.4 - normalizedYearA * 0.3;
+      const scoreB = normalizedPriceB * 0.3 + normalizedOdometerB * 0.4 - normalizedYearB * 0.3;
   
       // Debugging output to compare the scores
       // console.log(`Car A: Price=${a.price}, Odometer=${a.odometer}, Year=${a.year}, Score=${scoreA}`);
