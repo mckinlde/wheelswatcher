@@ -24,6 +24,7 @@ function App() {
         endYear,
         bodyTerms: bodyTermsArray
       });
+      console.log('bodyTermsArray:', bodyTermsArray);
       console.log('Unsold Query Result:', response.data);
       setUnsoldCars(best_deal(response.data));  // Sort by best_deal
     } catch (error) {
@@ -112,8 +113,8 @@ function App() {
       const scoreB = normalizedPriceB * 0.4 + normalizedOdometerB * 0.3 - normalizedYearB * 0.3;
   
       // Debugging output to compare the scores
-      console.log(`Car A: Price=${a.price}, Odometer=${a.odometer}, Year=${a.year}, Score=${scoreA}`);
-      console.log(`Car B: Price=${b.price}, Odometer=${b.odometer}, Year=${b.year}, Score=${scoreB}`);
+      // console.log(`Car A: Price=${a.price}, Odometer=${a.odometer}, Year=${a.year}, Score=${scoreA}`);
+      // console.log(`Car B: Price=${b.price}, Odometer=${b.odometer}, Year=${b.year}, Score=${scoreB}`);
   
       return scoreA - scoreB;  // Sort in ascending order (best deal first)
     });
