@@ -129,7 +129,7 @@ function App() {
         <header className="App-header">
           <p>
             <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
-              Contact
+              cadocary@gmail.com
             </a>
           </p>
           <div className="intro-box">
