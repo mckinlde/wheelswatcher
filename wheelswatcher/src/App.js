@@ -6,13 +6,23 @@ import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dG
 import PriceOdometerTime3DGraph from './PriceOdometerTime3DGraph';
 
 function App() {
-  const [make, setMake] = useState('subaru');
-  const [model, setModel] = useState('outback');
+  const [make, setMake] = useState('ford');
+  const [model, setModel] = useState('f150');
   const [startYear, setStartYear] = useState(2001);
   const [endYear, setEndYear] = useState(2010);
-  const [bodyTerms, setBodyTerms] = useState('6cyl, 6 cyl, 6cylinder, 6 cylinder');
+  const [bodyTerms, setBodyTerms] = useState('');
   const [results, setResults] = useState([]); // To store the query results of sold cars
   const [unsoldCars, setUnsoldCars] = useState([]);  // To store the unsold Subaru cars
+
+  // expandable sectioning
+  const [expandedSections, setExpandedSections] = useState({});
+
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
 
   // Fetch unsold cars after submit
   const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
@@ -128,147 +138,246 @@ function App() {
       <div className="container">
         <header className="App-header">
           <p>
+            Contact: 
             <a className="App-link" href="mailto:cadocary@gmail.com" target="_blank" rel="noopener noreferrer">
               cadocary@gmail.com
             </a>
           </p>
           <div className="intro-box">
-            <p>Welcome to the car listings database. You can now search for cars by choosing a make, model, year range, and specific keywords you'd like to search for in the description.</p>
-            <p>The default search is for a 2001-2010 Subaru Outback with a 6 cylinder engine.</p>
+            <p>Welcome to CarSaleSignal; where I try to give small dealerships and individual buyers an unfair information advantage over big players like KBB and Penske.</p>
           </div>
 
-          {/* Form to customize the query */}
-          <form onSubmit={handleSubmit} className="search-form">
-            <label className="form-label">
-              Make:
-              <input 
-                type="text" 
-                value={make} 
-                onChange={(e) => setMake(e.target.value)} 
-                className="form-input" 
-              />
-            </label>
-
-            <label className="form-label">
-              Model:
-              <input 
-                type="text" 
-                value={model} 
-                onChange={(e) => setModel(e.target.value)} 
-                className="form-input" 
-              />
-            </label>
-
-            <label className="form-label">
-              Start Year:
-              <input 
-                type="number" 
-                value={startYear} 
-                onChange={(e) => setStartYear(e.target.value)} 
-                className="form-input" 
-              />
-            </label>
-
-            <label className="form-label">
-              End Year:
-              <input 
-                type="number" 
-                value={endYear} 
-                onChange={(e) => setEndYear(e.target.value)} 
-                className="form-input" 
-              />
-            </label>
-
-            <label className="form-label">
-              Keywords (comma-separated):
-              <input 
-                type="text" 
-                value={bodyTerms} 
-                onChange={(e) => setBodyTerms(e.target.value)} 
-                className="form-input" 
-                placeholder={bodyTerms}
-              />
-            </label>
-
-            <button type="submit" className="submit-button">
-              Search Cars
-            </button>
-          </form>
-
-          {/* Display sold cars in a table */}
-          {results.length > 0 && (
-            <div className="table-container">
-              <h2>Cars Sold in the past</h2>
-              <table className="results-table">
-                <thead>
-                  <tr>
-                    <th>Price</th>
-                    <th>Odometer</th>
-                    <th>Year</th>
-                    <th>Title</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {results.map((car, index) => (
-                    <tr key={index}>
-                      <td>{car.price}</td>
-                      <td>{car.odometer}</td>
-                      <td>{car.year}</td>
-                      <td>{car.title}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* What is it */}
+          <h2
+            className="collapsible-title"
+            onClick={() => toggleSection("What is it")}
+          >
+            <span
+              className={`carrot ${
+                expandedSections.environment ? "expanded" : ""
+              }`}
+            ></span>{" "}
+            What is it
+          </h2>
+          {expandedSections.environment && (
+            <div className="collapsible-content">
+              <p>
+                CarSaleSignal is a database of all the used car listings in America that get taken down and marked as sold by the author of the listing.  This allows small dealerships and private sellers to see what they can sell their car for based on what similar cars are actually being purchased for by private parties--not what KBB or large corporate dealerships claim.
+              </p>
             </div>
           )}
 
-          {/* Render the graphs if results are available */}
-          {results.length > 0 && (
-            <>
-            <p>Here are graphs of the cars above, which have already sold.</p>
-            <p>By "Days Listed", we mean how long the listing was up before the car sold and the seller removed the listing.</p>
-            <p>Tip: you can click the points to see precise numbers for that point!</p>
-              <h2>Price vs Days Listed</h2>
-              <PriceDurationGraph listings={results} />
-              <h2>Price vs Odometer</h2>
-              <PriceOdometerGraph listings={results} />
-              <h2>Odometer vs Days Listed</h2>
-              <OdometerTimeGraph listings={results} />
-              <h2>3D Price vs Odometer & Days Listed</h2>
-              <PriceOdometerTime3DGraph listings={results} />
-            </>
+          {/* How does it work */}
+          <h2
+            className="collapsible-title"
+            onClick={() => toggleSection("How does it work")}
+          >
+            <span
+              className={`carrot ${
+                expandedSections.environment ? "expanded" : ""
+              }`}
+            ></span>{" "}
+            How does it work
+          </h2>
+          {expandedSections.environment && (
+            <div className="collapsible-content">
+              <p>
+                CarSaleSignal works from a distributed system of computers in the cloud that collectively read all of Craigslist every night.  Imagine a hundred laptops doing this in your closet:
+              </p>
+              {/* Embed the GIF */}
+              <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                <img
+                  src={`${process.env.PUBLIC_URL}/ezgif.com-gif-maker.gif`}
+                  alt="Description of the gif"
+                  style={{ maxWidth: "100%", borderRadius: "8px" }}
+                />
+              </div>
+              <p>
+                All day, all night, without stopping, and importantly without interfering with Craigslist's normal operation.  It's not entirely different than mining bitcoin, but instead of doing abstract math what these computers are doing is checking used car listings to see which get flagged as scams, which stay up forever, and which get taken down by the author and marked as sold.  By saving the listing details and the length of time it was up, CarSaleSignal builds a database of every car that sells--and the prices they sell at.
+              </p>
+            </div>
           )}
 
-          {/* Display unsold cars in a table */}
-          {unsoldCars.length > 0 && (
-            <div className="table-container">
-              <h2>Cars Available in WA</h2>
-              <table className="results-table">
-                <thead>
-                  <tr>
-                    <th>Price</th>
-                    <th>Odometer</th>
-                    <th>Year</th>
-                    <th>Title</th>
-                    <th>Link</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {unsoldCars.map((car, index) => (
-                    <tr key={index}>
-                      <td>{car.price}</td>
-                      <td>{car.odometer}</td>
-                      <td>{car.year}</td>
-                      <td>{car.title}</td>
-                      <td>
-                        <a href={car.url} target="_blank" rel="noopener noreferrer">
-                          🔗 {/* Unicode link symbol */}
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          {/* Why bother? */}
+          <h2
+            className="collapsible-title"
+            onClick={() => toggleSection("Why bother?")}
+          >
+            <span
+              className={`carrot ${
+                expandedSections.environment ? "expanded" : ""
+              }`}
+            ></span>{" "}
+            Why bother?
+          </h2>
+          {expandedSections.environment && (
+            <div className="collapsible-content">
+              <p>
+                Because trying to figure out whether or not something is a good deal is fucking frusturating!  Trade-in values all suck, and nobody trusts KBB--with good reason!  We all took 6th grade math; if you don't show your work you don't get credit.  I hate looking at an individual number without getting to see how it got there, and now I don't have to--and neither does anybody else.
+              </p>
+            </div>
+          )}
+
+          {/* Can I try it? */}
+          <h2
+            className="collapsible-title"
+            onClick={() => toggleSection("Can I try it?")}
+          >
+            <span
+              className={`carrot ${
+                expandedSections.environment ? "expanded" : ""
+              }`}
+            ></span>{" "}
+            Can I try it?
+          </h2>
+          {expandedSections.environment && (
+            <div className="collapsible-content">
+              <p>
+                Sure, fill out the form and I'll show you all the matching cars that sold in September 2014 in a neat little table--along with some fun graphs of the Prive vs Odometer vs how long the listing was up before selling.
+              </p>
+              {/* Form to customize the query */}
+              <form onSubmit={handleSubmit} className="search-form">
+                <label className="form-label">
+                  Make:
+                  <input 
+                    type="text" 
+                    value={make} 
+                    onChange={(e) => setMake(e.target.value)} 
+                    className="form-input" 
+                  />
+                </label>
+
+                <label className="form-label">
+                  Model:
+                  <input 
+                    type="text" 
+                    value={model} 
+                    onChange={(e) => setModel(e.target.value)} 
+                    className="form-input" 
+                  />
+                </label>
+
+                <label className="form-label">
+                  Start Year:
+                  <input 
+                    type="number" 
+                    value={startYear} 
+                    onChange={(e) => setStartYear(e.target.value)} 
+                    className="form-input" 
+                  />
+                </label>
+
+                <label className="form-label">
+                  End Year:
+                  <input 
+                    type="number" 
+                    value={endYear} 
+                    onChange={(e) => setEndYear(e.target.value)} 
+                    className="form-input" 
+                  />
+                </label>
+
+                <button type="submit" className="submit-button">
+                  Search Cars
+                </button>
+              </form>
+
+              {/* Display sold cars in a table */}
+              {results.length > 0 && (
+                <div className="table-container">
+                  <h2>Cars Sold in the past</h2>
+                  <table className="results-table">
+                    <thead>
+                      <tr>
+                        <th>Price</th>
+                        <th>Odometer</th>
+                        <th>Year</th>
+                        <th>Title</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {results.map((car, index) => (
+                        <tr key={index}>
+                          <td>{car.price}</td>
+                          <td>{car.odometer}</td>
+                          <td>{car.year}</td>
+                          <td>{car.title}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Render the graphs if results are available */}
+              {results.length > 0 && (
+                <>
+                <p>Here are graphs of the cars above, which have already sold.</p>
+                <p>By "Days Listed", we mean how long the listing was up before the car sold and the seller removed the listing.</p>
+                <p>Tip: you can click the points to see precise numbers for that point!</p>
+                  <h2>Price vs Days Listed</h2>
+                  <PriceDurationGraph listings={results} />
+                  <h2>Price vs Odometer</h2>
+                  <PriceOdometerGraph listings={results} />
+                  <h2>Odometer vs Days Listed</h2>
+                  <OdometerTimeGraph listings={results} />
+                  <h2>3D Price vs Odometer & Days Listed</h2>
+                  <PriceOdometerTime3DGraph listings={results} />
+                </>
+              )}
+
+              {/* Display unsold cars in a table */}
+              {unsoldCars.length > 0 && (
+                <div className="table-container">
+                  <h2>Cars Available in WA</h2>
+                  <table className="results-table">
+                    <thead>
+                      <tr>
+                        <th>Price</th>
+                        <th>Odometer</th>
+                        <th>Year</th>
+                        <th>Title</th>
+                        <th>Link</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {unsoldCars.map((car, index) => (
+                        <tr key={index}>
+                          <td>{car.price}</td>
+                          <td>{car.odometer}</td>
+                          <td>{car.year}</td>
+                          <td>{car.title}</td>
+                          <td>
+                            <a href={car.url} target="_blank" rel="noopener noreferrer">
+                              🔗 {/* Unicode link symbol */}
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Can I buy it? */}
+          <h2
+            className="collapsible-title"
+            onClick={() => toggleSection("Can I buy it?")}
+          >
+            <span
+              className={`carrot ${
+                expandedSections.environment ? "expanded" : ""
+              }`}
+            ></span>{" "}
+            Can I buy it?
+          </h2>
+          {expandedSections.environment && (
+            <div className="collapsible-content">
+              <p>
+                Sure can.  Send me an email at cadocary@gmail.com, and for less than you expect I'll hook you up.  Whether you're a private seller who just wants to price their car, or a business that wants live updates of all the sales in their area, we'll work something out.
+              </p>
             </div>
           )}
         </header>
