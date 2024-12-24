@@ -10,6 +10,7 @@ npm run build
 sudo systemctl restart wheelswatcher-combined
 ```
 ## --------------------------
+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
 
 Easily Deploy Full Stack Node.js Apps on AWS EC2 | Step-by-Step Tutorial
 https://www.youtube.com/watch?v=nQdyiK7-VlQ

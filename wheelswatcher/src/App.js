@@ -150,16 +150,16 @@ function App() {
           {/* What is it */}
           <h2
             className="collapsible-title"
-            onClick={() => toggleSection("What is it")}
+            onClick={() => toggleSection("Whatisit")}
           >
             <span
               className={`carrot ${
-                expandedSections.environment ? "expanded" : ""
+                expandedSections.Whatisit ? "expanded" : ""
               }`}
             ></span>{" "}
             What is it
           </h2>
-          {expandedSections.environment && (
+          {expandedSections.Whatisit && (
             <div className="collapsible-content">
               <p>
                 CarSaleSignal is a database of all the used car listings in America that get taken down and marked as sold by the author of the listing.  This allows small dealerships and private sellers to see what they can sell their car for based on what similar cars are actually being purchased for by private parties--not what KBB or large corporate dealerships claim.
@@ -170,16 +170,16 @@ function App() {
           {/* How does it work */}
           <h2
             className="collapsible-title"
-            onClick={() => toggleSection("How does it work")}
+            onClick={() => toggleSection("Howdoesitwork")}
           >
             <span
               className={`carrot ${
-                expandedSections.environment ? "expanded" : ""
+                expandedSections.Howdoesitwork ? "expanded" : ""
               }`}
             ></span>{" "}
             How does it work
           </h2>
-          {expandedSections.environment && (
+          {expandedSections.Howdoesitwork && (
             <div className="collapsible-content">
               <p>
                 CarSaleSignal works from a distributed system of computers in the cloud that collectively read all of Craigslist every night.  Imagine a hundred laptops doing this in your closet:
@@ -201,16 +201,16 @@ function App() {
           {/* Why bother? */}
           <h2
             className="collapsible-title"
-            onClick={() => toggleSection("Why bother?")}
+            onClick={() => toggleSection("Whybother")}
           >
             <span
               className={`carrot ${
-                expandedSections.environment ? "expanded" : ""
+                expandedSections.Whybother ? "expanded" : ""
               }`}
             ></span>{" "}
             Why bother?
           </h2>
-          {expandedSections.environment && (
+          {expandedSections.Whybother && (
             <div className="collapsible-content">
               <p>
                 Because trying to figure out whether or not something is a good deal is fucking frusturating!  Trade-in values all suck, and nobody trusts KBB--with good reason!  We all took 6th grade math; if you don't show your work you don't get credit.  I hate looking at an individual number without getting to see how it got there, and now I don't have to--and neither does anybody else.
@@ -221,16 +221,16 @@ function App() {
           {/* Can I try it? */}
           <h2
             className="collapsible-title"
-            onClick={() => toggleSection("Can I try it?")}
+            onClick={() => toggleSection("CanItryit")}
           >
             <span
               className={`carrot ${
-                expandedSections.environment ? "expanded" : ""
+                expandedSections.CanItryit ? "expanded" : ""
               }`}
             ></span>{" "}
             Can I try it?
           </h2>
-          {expandedSections.environment && (
+          {expandedSections.CanItryit && (
             <div className="collapsible-content">
               <p>
                 Sure, fill out the form and I'll show you all the matching cars that sold in September 2014 in a neat little table--along with some fun graphs of the Prive vs Odometer vs how long the listing was up before selling.
@@ -364,16 +364,16 @@ function App() {
           {/* Can I buy it? */}
           <h2
             className="collapsible-title"
-            onClick={() => toggleSection("Can I buy it?")}
+            onClick={() => toggleSection("CanIbuyit")}
           >
             <span
               className={`carrot ${
-                expandedSections.environment ? "expanded" : ""
+                expandedSections.CanIbuyit ? "expanded" : ""
               }`}
             ></span>{" "}
             Can I buy it?
           </h2>
-          {expandedSections.environment && (
+          {expandedSections.CanIbuyit && (
             <div className="collapsible-content">
               <p>
                 Sure can.  Send me an email at cadocary@gmail.com, and for less than you expect I'll hook you up.  Whether you're a private seller who just wants to price their car, or a business that wants live updates of all the sales in their area, we'll work something out.
