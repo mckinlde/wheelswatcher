@@ -426,7 +426,7 @@ function App() {
 
           <h2>How does it work</h2>
           <p>
-            CarSaleSignal works from a distributed system of computers in the cloud (fancy words; it's just this:
+            CarSaleSignal works from a distributed system of computers in the cloud (fancy words because I use this on my resume; it's just this:
           </p>
           <div style={{ textAlign: "center", marginBottom: "20px" }}>
             <img
