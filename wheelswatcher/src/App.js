@@ -369,7 +369,7 @@ function App() {
           }
         ]   
       );
-      console.log(response.data)
+      // console.log(response.data)
       // fetchUnsoldCars(lowercasedMake, lowercasedModel, startYear, endYear, bodyTermsArray);
     } catch (error) {
       console.error('Error querying the database:', error);
