@@ -67,7 +67,7 @@ function PriceDurationGraph({ listings }) {
     x: (new Date(listing.updated) - new Date(listing.added)) / (1000 * 60 * 60 * 24),
     y: parseFloat(listing.price.replace(/[^0-9.-]+/g, '')),
     title: listing.title,
-  }));
+  })).filter(point => !isNaN(point.x) && !isNaN(point.y));
 
   const { slope, intercept } = calculateLinearRegression(dataPoints);
   const trendline = generateTrendlinePoints(dataPoints, slope, intercept);
@@ -99,7 +99,7 @@ function OdometerTimeGraph({ listings }) {
     x: (new Date(listing.updated) - new Date(listing.added)) / (1000 * 60 * 60 * 24),
     y: parseFloat(listing.odometer),
     title: listing.title,
-  }));
+  })).filter(point => !isNaN(point.x) && !isNaN(point.y));
 
   const { slope, intercept } = calculateLinearRegression(dataPoints);
   const trendline = generateTrendlinePoints(dataPoints, slope, intercept);
@@ -131,7 +131,7 @@ function PriceOdometerGraph({ listings }) {
     x: parseFloat(listing.odometer),
     y: parseFloat(listing.price.replace(/[^0-9.-]+/g, '')),
     title: listing.title,
-  }));
+  })).filter(point => !isNaN(point.x) && !isNaN(point.y));
 
   const { slope, intercept } = calculateLinearRegression(dataPoints);
   const trendline = generateTrendlinePoints(dataPoints, slope, intercept);
