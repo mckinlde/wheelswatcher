@@ -62,7 +62,7 @@ function PriceDurationGraph({ listings }) {
 function OdometerTimeGraph({ listings }) {
   const dataPoints = listings.map((listing) => ({
     x: (new Date(listing.updated) - new Date(listing.added)) / (1000 * 60 * 60 * 24),
-    y: parseFloat(listing.odometer),
+    y: parseFloat(listing.odometer), // Odometer as y-axis
     title: listing.title,
   }));
 
@@ -74,14 +74,14 @@ function OdometerTimeGraph({ listings }) {
       {
         label: 'Car Listings',
         data: dataPoints,
-        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
         pointRadius: 6,
       },
       {
         label: 'Trendline',
         data: trendline,
         type: 'line',
-        borderColor: 'rgba(153, 102, 255, 0.8)',
+        borderColor: 'rgba(255, 99, 132, 0.8)',
         borderWidth: 2,
         pointRadius: 0,
       }
@@ -91,10 +91,11 @@ function OdometerTimeGraph({ listings }) {
   return <ScatterPlot chartData={chartData} xLabel='Days Listed' yLabel='Odometer' />;
 }
 
+
 function PriceOdometerGraph({ listings }) {
   const dataPoints = listings.map((listing) => ({
-    x: parseFloat(listing.odometer),
-    y: parseFloat(listing.price.replace(/[^0-9.-]+/g, '')),
+    x: parseFloat(listing.odometer), // Odometer as x-axis
+    y: parseFloat(listing.price.replace(/[^0-9.-]+/g, '')), // Price as y-axis
     title: listing.title,
   }));
 
@@ -106,56 +107,22 @@ function PriceOdometerGraph({ listings }) {
       {
         label: 'Car Listings',
         data: dataPoints,
-        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
         pointRadius: 6,
       },
       {
         label: 'Trendline',
         data: trendline,
         type: 'line',
-        borderColor: 'rgba(255, 159, 64, 0.8)',
+        borderColor: 'rgba(255, 99, 132, 0.8)',
         borderWidth: 2,
         pointRadius: 0,
       }
     ],
   };
 
-  return <ScatterPlot chartData={chartData} xLabel='Odometer' yLabel='Price ($)' />;
+  return <ScatterPlot chartData={chartData} xLabel='Days Listed' yLabel='Odometer' />;
 }
 
-function ScatterPlot({ chartData, xLabel, yLabel }) {
-  const options = {
-    scales: {
-      x: {
-        type: 'linear',
-        title: { display: true, text: xLabel, color: '#ffffff' },
-        min: 0,
-        ticks: { color: '#ffffff' },
-      },
-      y: {
-        title: { display: true, text: yLabel, color: '#ffffff' },
-        min: 0,
-        ticks: { color: '#ffffff' },
-      },
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const listing = context.raw;
-            return `${listing.title || ''}: ${xLabel}: ${listing.x.toFixed(1)}, ${yLabel}: ${listing.y.toFixed(2)}`;
-          },
-        },
-      },
-    },
-    maintainAspectRatio: false,
-  };
-
-  return (
-    <div style={{ position: 'relative', height: '400px', width: '100%' }}>
-      <Scatter data={chartData} options={options} />
-    </div>
-  );
-}
 
 export { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph };
