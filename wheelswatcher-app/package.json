@@ -50,8 +50,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.8",
     "autoprefixer": "^10.4.21",
-    "tailwindcss": "^4.1.8"
+    "postcss": "^8.5.4",
+    "tailwindcss": "^3.4.17"
   }
 }
