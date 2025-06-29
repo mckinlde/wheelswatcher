@@ -3,7 +3,7 @@ import './App.css';
 import axios from 'axios';
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
 import PriceOdometerTime3DGraph from './PriceOdometerTime3DGraph';
-import Sidebar from './components/Sidebar';
+// import Sidebar from './components/Sidebar';
 
 function App() {
 
@@ -107,11 +107,11 @@ function App() {
   return (
     <div className="App">
 
-      <Sidebar onFilterChange={handleFilterChange} />
+      {/* <Sidebar onFilterChange={handleFilterChange} />
       <div className="flex-grow p-4">
         {/* Your existing graphs or listings go here */}
-        <h2>Main Graph View</h2>
-      </div>
+        {/* <h2>Main Graph View</h2>
+      </div> */}
       
       <div className="container">
         <header className="App-header">
@@ -255,8 +255,20 @@ function App() {
           </p>
         </header>
       </div>
-    </div>
+    {/* </div> */}
   );
 }
+
+{/* === After updating this file ===
+# From project root
+cd ~/wheelswatcher/wheelswatcher-app
+git pull origin main
+
+# Rebuild frontend if needed
+npm install
+npm run build
+
+# Restart service
+sudo systemctl restart wheelswatcher-combined */}
 
 export default App;

@@ -160,6 +160,7 @@ app.listen(port, () => {
 // === After updating this file ===
 // # From project root
 // cd ~/wheelswatcher/wheelswatcher-app
+// git pull origin main
 
 // # Rebuild frontend if needed
 // npm install
