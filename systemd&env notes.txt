@@ -33,3 +33,31 @@ sudo systemctl start wheelswatcherapp.service
 
 npm run build
 sudo systemctl restart wheelswatcherapp.service
+
+
+
+[ec2-user@ip-172-31-13-155 wheelswatcher-app]$ vi /etc/systemd/system/wheelswatcher-combined.service
+[ec2-user@ip-172-31-13-155 wheelswatcher-app]$ sudo vi /etc/systemd/system/wheelswatcher-combined.service
+[ec2-user@ip-172-31-13-155 wheelswatcher-app]$ cat /etc/systemd/system/wheelswatcher-combined.service
+[Unit]
+Description=Node.js Server and React App for wheelswatcher
+After=network.target
+
+[Service]
+WorkingDirectory=/home/ec2-user/wheelswatcher/wheelswatcher-app
+ExecStart=/usr/bin/node /home/ec2-user/wheelswatcher/wheelswatcher-app/server.js
+Restart=on-failure
+User=ec2-user
+Group=ec2-user
+Environment=NODE_ENV=production
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=wheelswatcher-combined
+
+[Install]
+WantedBy=multi-user.target
+
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart wheelswatcher-combined
+sudo systemctl status wheelswatcher-combined
