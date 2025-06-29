@@ -15,14 +15,24 @@ app.use(cors({
 
   
 // PostgreSQL connection pool (adjust credentials to your RDS instance)
+
+// connect to laptop via tailscale
 const pool = new Pool({
-  user: 'postgres',
-  host: 'database-1.cluster-ro-cvu2u86aui5t.us-west-2.rds.amazonaws.com',
-  database: 'seattlecars',
-  password: 'kellybluebook',
-  port: 5432,  // Or your RDS port
+  user: 'ec2_writer',
+  password: 'somethingsecure',
+  host: '100.80.9.95',  // Tailscale IP of your laptop
+  port: 5432,
+  database: 'DVc4_data',
 });
 
+// deprecated RDS connection
+// const pool = new Pool({
+//   user: 'postgres',
+//   host: 'database-1.cluster-ro-cvu2u86aui5t.us-west-2.rds.amazonaws.com',
+//   database: 'seattlecars',
+//   password: 'kellybluebook',
+//   port: 5432,  // Or your RDS port
+// });
 
 // Endpoint to run a SELECT query based on dropdown inputs
 app.post('/api/query-listings', async (req, res) => {
