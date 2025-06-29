@@ -40,24 +40,40 @@ sudo systemctl restart wheelswatcherapp.service
 [ec2-user@ip-172-31-13-155 wheelswatcher-app]$ sudo vi /etc/systemd/system/wheelswatcher-combined.service
 [ec2-user@ip-172-31-13-155 wheelswatcher-app]$ cat /etc/systemd/system/wheelswatcher-combined.service
 [Unit]
-Description=Node.js Server and React App for wheelswatcher
+Description=wheelswatcher Node.js + Express API
 After=network.target
 
 [Service]
 WorkingDirectory=/home/ec2-user/wheelswatcher/wheelswatcher-app
 ExecStart=/usr/bin/node /home/ec2-user/wheelswatcher/wheelswatcher-app/server.js
-Restart=on-failure
+Restart=always
 User=ec2-user
-Group=ec2-user
 Environment=NODE_ENV=production
+EnvironmentFile=-/etc/app.env
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=wheelswatcher-combined
+SyslogIdentifier=wheelswatcherapp
 
 [Install]
 WantedBy=multi-user.target
+
 
 sudo systemctl daemon-reexec
 sudo systemctl daemon-reload
 sudo systemctl restart wheelswatcher-combined
 sudo systemctl status wheelswatcher-combined
+
+
+# 1. Rebuild frontend (only if needed, like after changes to React UI)
+cd ~/wheelswatcher/wheelswatcher-app
+npm install            # safe to run even if already installed
+npm run build          # rebuild production-ready React bundle
+
+# 2. Reload systemd and restart your service
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl restart wheelswatcher-combined.service
+
+# 3. Check status/logs
+sudo systemctl status wheelswatcher-combined.service
+journalctl -u wheelswatcher-combined.service -n 50 --no-pager
