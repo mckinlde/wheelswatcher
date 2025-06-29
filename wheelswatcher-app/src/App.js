@@ -256,9 +256,7 @@ function App() {
         </header>
       </div>
     {/* </div> */}
-  );
-}
-
+    
 {/* === After updating this file ===
 # From project root
 cd ~/wheelswatcher/wheelswatcher-app
@@ -270,5 +268,8 @@ npm run build
 
 # Restart service
 sudo systemctl restart wheelswatcher-combined */}
+  );
+}
+
 
 export default App;
