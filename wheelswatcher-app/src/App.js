@@ -200,19 +200,17 @@ function App() {
                 className="form-input" 
               />
             </label>
-            <label className="form-label">
-              Access Code:
-              <input 
-                type="text" 
-                value={access_code} 
-                onChange={(e) => setaccess_code(e.target.value)} 
-                className="form-input" 
-              />
-            </label>
 
-            {/* <button type="submit" className="submit-button">
+            <input 
+              type="password" 
+              value={access_code} 
+              onChange={(e) => setaccess_code(e.target.value)} 
+              className="form-input" 
+            />
+
+            <button type="submit" className="submit-button">
               Search Cars
-            </button> */}
+            </button>
           </form>
 
           {/* Render results and graphs */}
