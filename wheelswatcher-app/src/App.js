@@ -102,9 +102,9 @@ function App() {
           <label>End Year:
             <input type="number" value={endYear} onChange={(e) => setEndYear(e.target.value)} />
           </label>
-          <label>Body Terms:
+          {/* <label>Body Terms:
             <input type="text" value={bodyTerms} onChange={(e) => setBodyTerms(e.target.value)} />
-          </label>
+          </label> */}
           <label>Access Code:
             <input type="password" value={access_code} onChange={(e) => setAccessCode(e.target.value)} />
           </label>
