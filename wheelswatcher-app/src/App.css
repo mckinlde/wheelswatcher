@@ -19,20 +19,6 @@
   margin-bottom: 1rem;
 }
 
-.sidebar-toggle {
-  position: fixed;
-  top: 10px;
-  left: 10px;
-  z-index: 1000;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  font-size: 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  display: none;
-}
 
 @media (max-width: 768px) {
   .sidebar {
@@ -49,7 +35,7 @@
   .sidebar.open {
     left: 0;
   }
-
+  
   .sidebar-toggle {
     position: fixed;
     bottom: 16px;
@@ -62,7 +48,7 @@
     font-size: 1.5rem;
     border-radius: 8px;
     cursor: pointer;
-    display: none; /* hidden by default (desktop) */
+    display: block;
   }
 
 
