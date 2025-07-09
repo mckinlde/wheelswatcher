@@ -22,6 +22,7 @@ function App() {
     },
   ]);
   const [unsoldCars, setUnsoldCars] = useState([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
     try {
@@ -56,6 +57,7 @@ function App() {
       });
       setResults(response.data);
       fetchUnsoldCars(lowercasedMake, lowercasedModel, startYear, endYear, bodyTermsArray);
+      setSidebarOpen(false); // Optional: auto-close on submit
     } catch (error) {
       console.error('Error querying the database:', error);
     }
@@ -86,8 +88,15 @@ function App() {
   }
 
   return (
-    <div className="app-layout">
-      <aside className="sidebar">
+    <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
+      
+      {/* Mobile Sidebar Toggle Button */}
+      <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+        ☰
+      </button>
+
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <h2>Search Cars</h2>
         <form onSubmit={handleSubmit} className="form">
           <label>Make:
@@ -112,10 +121,11 @@ function App() {
         </form>
       </aside>
 
+      {/* Main Content */}
       <main className="main-content">
         <div className="intro-box">
           <p>
-            Welcome to CarSaleSignal: The Automotive MLS built to give small dealerships and individual buyers an unfair information advantage.
+            Welcome to CarSaleSignal: built to give small dealerships and individual buyers a real edge over big players.
           </p>
         </div>
 
