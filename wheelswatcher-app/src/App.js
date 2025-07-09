@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
-import PriceOdometerTime3DGraph from './PriceOdometerTime3DGraph';
 
 function App() {
   const [access_code, setAccessCode] = useState('');
@@ -21,7 +20,6 @@ function App() {
       "year": "2001"
     },
   ]);
-  const [unsoldCars, setUnsoldCars] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
@@ -29,7 +27,7 @@ function App() {
       const response = await axios.post('https://carsalesignal.com/api/unsold-parameterized', {
         make, model, startYear, endYear, bodyTerms: bodyTermsArray
       });
-      setUnsoldCars(best_deal(response.data));
+      // setUnsoldCars(best_deal(response.data));
     } catch (error) {
       console.error('Error fetching unsold cars:', error);
     }
@@ -57,45 +55,18 @@ function App() {
       });
       setResults(response.data);
       fetchUnsoldCars(lowercasedMake, lowercasedModel, startYear, endYear, bodyTermsArray);
-      setSidebarOpen(false); // Optional: auto-close on submit
+      setSidebarOpen(false);
     } catch (error) {
       console.error('Error querying the database:', error);
     }
   };
 
-  function best_deal(cars) {
-    const parsePrice = (price) => parseInt(price.replace(/[^0-9]/g, ''), 10);
-    const priceMin = Math.min(...cars.map(car => parsePrice(car.price)));
-    const priceMax = Math.max(...cars.map(car => parsePrice(car.price)));
-    const odometerMin = Math.min(...cars.map(car => parseInt(car.odometer, 10)));
-    const odometerMax = Math.max(...cars.map(car => parseInt(car.odometer, 10)));
-    const yearMin = Math.min(...cars.map(car => parseInt(car.year, 10)));
-    const yearMax = Math.max(...cars.map(car => parseInt(car.year, 10)));
-
-    const safeDiv = (num, denom) => denom === 0 ? 0 : num / denom;
-
-    return cars.sort((a, b) => {
-      const scoreA = safeDiv(parsePrice(a.price) - priceMin, priceMax - priceMin) * 0.3 +
-                     safeDiv(parseInt(a.odometer, 10) - odometerMin, odometerMax - odometerMin) * 0.4 -
-                     safeDiv(parseInt(a.year, 10) - yearMin, yearMax - yearMin) * 0.3;
-
-      const scoreB = safeDiv(parsePrice(b.price) - priceMin, priceMax - priceMin) * 0.3 +
-                     safeDiv(parseInt(b.odometer, 10) - odometerMin, odometerMax - odometerMin) * 0.4 -
-                     safeDiv(parseInt(b.year, 10) - yearMin, yearMax - yearMin) * 0.3;
-
-      return scoreA - scoreB;
-    });
-  }
-
   return (
     <div className={`app-layout ${sidebarOpen ? 'sidebar-open' : ''}`}>
-      
-      {/* Mobile Sidebar Toggle Button */}
       <button className="sidebar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
         ☰
       </button>
 
-      {/* Sidebar */}
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <h2>Search Cars</h2>
         <form onSubmit={handleSubmit} className="form">
@@ -121,11 +92,10 @@ function App() {
         </form>
       </aside>
 
-      {/* Main Content */}
       <main className="main-content">
         <div className="intro-box">
           <p>
-            Welcome to CarSaleSignal: built to give small dealerships and individual buyers a real edge over big players.
+            Welcome to CarSaleSignal: <strong>The automotive MLS built to give small dealerships and individual buyers an unfair information advantage.</strong>
           </p>
         </div>
 
@@ -171,6 +141,7 @@ function App() {
 }
 
 export default App;
+
 
 // === After updating this file ===
 // # From project root
