@@ -95,7 +95,7 @@ function App() {
       <main className="main-content">
         <div className="intro-box">
           <p>
-            Welcome to CarSaleSignal: <strong>The automotive MLS built to give small dealerships and individual buyers an unfair information advantage.</strong>
+            Welcome to CarSaleSignal: The automotive MLS built to give small dealerships and individual buyers an unfair information advantage.
           </p>
         </div>
 
