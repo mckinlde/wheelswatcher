@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
+import { AboutPage } from './components/about'; // 🆕 Import About component
 
 function App() {
   const [access_code, setAccessCode] = useState('');
@@ -21,13 +22,13 @@ function App() {
     },
   ]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [showAbout, setShowAbout] = useState(false); // 🆕
 
   const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
     try {
       const response = await axios.post('https://carsalesignal.com/api/unsold-parameterized', {
         make, model, startYear, endYear, bodyTerms: bodyTermsArray
       });
-      // setUnsoldCars(best_deal(response.data));
     } catch (error) {
       console.error('Error fetching unsold cars:', error);
     }
@@ -90,51 +91,61 @@ function App() {
           </label>
           <button type="submit">Submit</button>
         </form>
+
+        <button className="about-toggle" onClick={() => setShowAbout(!showAbout)}>
+          {showAbout ? 'Back to Dashboard' : 'About'}
+        </button>
       </aside>
 
       <main className="main-content">
-        <div className="intro-box">
-          <p>
-            Welcome to CarSaleSignal: The automotive MLS built to give small dealerships and individual buyers an unfair information advantage.
-          </p>
-        </div>
-
-        {results.length > 0 && (
+        {showAbout ? (
+          <AboutPage />
+        ) : (
           <>
-            <div className="graph-grid">
-              <div className="graph-tile"><PriceDurationGraph listings={results} /></div>
-              <div className="graph-tile"><PriceOdometerGraph listings={results} /></div>
-              <div className="graph-tile"><OdometerTimeGraph listings={results} /></div>
-              <div className="graph-tile placeholder"><p>More to come...</p></div>
+            <div className="intro-box">
+              <p>
+                Welcome to CarSaleSignal: The automotive MLS built to give small dealerships and individual buyers an unfair information advantage.
+              </p>
             </div>
 
-            <h2>Source Data</h2>
-            <table className="results-table">
-              <thead>
-                <tr>
-                  <th>Price</th>
-                  <th>Odometer</th>
-                  <th>Year</th>
-                  <th>Title</th>
-                </tr>
-              </thead>
-              <tbody>
-                {results.map((car, index) => (
-                  <tr key={index}>
-                    <td>{car.price}</td>
-                    <td>{car.odometer}</td>
-                    <td>{car.year}</td>
-                    <td>{car.title}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {results.length > 0 && (
+              <>
+                <div className="graph-grid">
+                  <div className="graph-tile"><PriceDurationGraph listings={results} /></div>
+                  <div className="graph-tile"><PriceOdometerGraph listings={results} /></div>
+                  <div className="graph-tile"><OdometerTimeGraph listings={results} /></div>
+                  <div className="graph-tile placeholder"><p>More to come...</p></div>
+                </div>
+
+                <h2>Source Data</h2>
+                <table className="results-table">
+                  <thead>
+                    <tr>
+                      <th>Price</th>
+                      <th>Odometer</th>
+                      <th>Year</th>
+                      <th>Title</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {results.map((car, index) => (
+                      <tr key={index}>
+                        <td>{car.price}</td>
+                        <td>{car.odometer}</td>
+                        <td>{car.year}</td>
+                        <td>{car.title}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )}
+
+            <footer style={{ marginTop: '2rem' }}>
+              <p>Contact: <a className="App-link" href="mailto:cadocary@gmail.com">cadocary@gmail.com</a></p>
+            </footer>
           </>
         )}
-
-        <footer style={{ marginTop: '2rem' }}>
-          <p>Contact: <a className="App-link" href="mailto:cadocary@gmail.com">cadocary@gmail.com</a></p>
-        </footer>
       </main>
     </div>
   );
