@@ -103,6 +103,19 @@ function App() {
           <label>End Year:
             <input type="number" value={endYear} onChange={(e) => setEndYear(e.target.value)} />
           </label>
+          <label>
+            Area:
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <input
+                type="text"
+                value="Atlanta"
+                readOnly
+                style={{ flex: 1 }}
+              />
+              <span role="img" aria-label="locked">🔒</span>
+            </div>
+          </label>
+
           {/* <label>Body Terms:
             <input type="text" value={bodyTerms} onChange={(e) => setBodyTerms(e.target.value)} />
           </label> */}
