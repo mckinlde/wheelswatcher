@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph, VolumeGraph } from './2dGraphs';
+import {
+  PriceDurationGraph,
+  OdometerTimeGraph,
+  PriceOdometerGraph,
+  VolumeGraph
+} from './2dGraphs';
 import { AboutPage } from './components/About'; // 🆕
 
 function App() {
@@ -23,6 +28,7 @@ function App() {
   ]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showAbout, setShowAbout] = useState(false); // 🆕
+  const [volumeData, setVolumeData] = useState(null); // 🆕
 
   const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
     try {
@@ -31,6 +37,18 @@ function App() {
       });
     } catch (error) {
       console.error('Error fetching unsold cars:', error);
+    }
+  };
+
+  const fetchVolumeData = async (make, model, startYear, endYear) => {
+    try {
+      const response = await axios.post('https://carsalesignal.com/api/volume-stats', {
+        make, model, startYear, endYear
+      });
+      setVolumeData(response.data);
+    } catch (error) {
+      console.error('Error fetching volume stats:', error);
+      setVolumeData(null);
     }
   };
 
@@ -55,8 +73,10 @@ function App() {
         bodyTerms: bodyTermsArray
       });
       setResults(response.data);
-      fetchUnsoldCars(lowercasedMake, lowercasedModel, startYear, endYear, bodyTermsArray);
       setSidebarOpen(false);
+
+      fetchUnsoldCars(lowercasedMake, lowercasedModel, startYear, endYear, bodyTermsArray);
+      fetchVolumeData(lowercasedMake, lowercasedModel, startYear, endYear); // 🆕
     } catch (error) {
       console.error('Error querying the database:', error);
     }
@@ -115,12 +135,11 @@ function App() {
                   <div className="graph-tile"><PriceOdometerGraph listings={results} /></div>
                   <div className="graph-tile"><OdometerTimeGraph listings={results} /></div>
                   <div className="graph-tile">
-                    <VolumeGraph volumeData={{
-                      "Listings Posted": [130, 990],
-                      "Cars Sold": [100, 870],
-                      "Scams Flagged": [12, 104],
-                      "Expired Listings": [18, 103]
-                    }} />
+                    {volumeData ? (
+                      <VolumeGraph volumeData={volumeData} />
+                    ) : (
+                      <p>Loading volume data…</p>
+                    )}
                   </div>
                 </div>
 
@@ -171,4 +190,4 @@ export default App;
 // npm run build
 
 // # Restart service
-// sudo systemctl restart wheelswatcher-combined 
+// sudo systemctl restart wheelswatcher-combined
