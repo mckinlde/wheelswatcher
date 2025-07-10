@@ -182,12 +182,9 @@ export default App;
 
 // === After updating this file ===
 // # From project root
-// cd ~/wheelswatcher/wheelswatcher-app
-// git pull origin main
+// # First Time
+// chmod +x ~/wheelswatcher/wheelswatcher-app/deploy.sh
+// ./wheelswatcher/wheelswatcher-app/deploy.sh
 
-// # Rebuild frontend if needed
-// npm install
-// npm run build
-
-// # Restart service
-// sudo systemctl restart wheelswatcher-combined
+// # Following Updates
+// ./wheelswatcher/wheelswatcher-app/deploy.sh
