@@ -1,5 +1,5 @@
 import React from 'react';
-import { Scatter } from 'react-chartjs-2';
+import { Scatter, Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 
 function calculateLinearRegression(data) {
@@ -19,15 +19,14 @@ function calculateLinearRegression(data) {
 
 function generateTrendlinePoints(data, slope, intercept) {
   const xValues = data.map(point => point.x);
-  const minX = Math.min(...xValues);
-  const maxX = Math.max(...xValues);
+  const [minX, maxX] = [Math.min(...xValues), Math.max(...xValues)];
   return [
     { x: minX, y: slope * minX + intercept },
     { x: maxX, y: slope * maxX + intercept },
   ];
 }
 
-function ScatterPlot({ chartData, xLabel, yLabel }) {
+function ScatterPlot({ chartData, xLabel, yLabel, title }) {
   const options = {
     scales: {
       x: {
@@ -43,6 +42,12 @@ function ScatterPlot({ chartData, xLabel, yLabel }) {
       },
     },
     plugins: {
+      title: {
+        display: true,
+        text: title,
+        color: '#ffffff',
+        font: { size: 18 },
+      },
       tooltip: {
         callbacks: {
           label: function (context) {
@@ -91,7 +96,7 @@ function PriceDurationGraph({ listings }) {
     ],
   };
 
-  return <ScatterPlot chartData={chartData} xLabel='Days Listed' yLabel='Price ($)' />;
+  return <ScatterPlot chartData={chartData} xLabel="Days Listed" yLabel="Price ($)" title="Cars Sold" />;
 }
 
 function OdometerTimeGraph({ listings }) {
@@ -123,7 +128,7 @@ function OdometerTimeGraph({ listings }) {
     ],
   };
 
-  return <ScatterPlot chartData={chartData} xLabel='Days Listed' yLabel='Odometer' />;
+  return <ScatterPlot chartData={chartData} xLabel="Days Listed" yLabel="Odometer" title="Odometer vs Time" />;
 }
 
 function PriceOdometerGraph({ listings }) {
@@ -155,7 +160,70 @@ function PriceOdometerGraph({ listings }) {
     ],
   };
 
-  return <ScatterPlot chartData={chartData} xLabel='Odometer' yLabel='Price ($)' />;
+  return <ScatterPlot chartData={chartData} xLabel="Odometer" yLabel="Price ($)" title="Price vs Odometer" />;
 }
 
-export { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph };
+function VolumeGraph({ volumeData }) {
+  const categories = Object.keys(volumeData);
+  const past60 = categories.map(cat => volumeData[cat][0]);
+  const past365 = categories.map(cat => volumeData[cat][1]);
+
+  const chartData = {
+    labels: categories,
+    datasets: [
+      {
+        label: 'Past 60 Days',
+        data: past60,
+        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+      },
+      {
+        label: 'Past Year',
+        data: past365,
+        backgroundColor: 'rgba(153, 102, 255, 0.7)',
+      }
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: 'Volume',
+        color: '#ffffff',
+        font: { size: 18 },
+      },
+      legend: {
+        labels: { color: '#ffffff' }
+      },
+    },
+    scales: {
+      x: {
+        ticks: { color: '#ffffff' },
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { color: '#ffffff' },
+        title: {
+          display: true,
+          text: 'Volume',
+          color: '#ffffff'
+        }
+      }
+    }
+  };
+
+  return (
+    <div style={{ position: 'relative', height: '400px', width: '100%' }}>
+      <Bar data={chartData} options={options} />
+    </div>
+  );
+}
+
+export {
+  PriceDurationGraph,
+  OdometerTimeGraph,
+  PriceOdometerGraph,
+  VolumeGraph
+};

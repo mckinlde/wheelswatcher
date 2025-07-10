@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
-import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
+import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph, VolumeGraph } from './2dGraphs';
 import { AboutPage } from './components/About'; // 🆕
 
 function App() {
@@ -114,7 +114,14 @@ function App() {
                   <div className="graph-tile"><PriceDurationGraph listings={results} /></div>
                   <div className="graph-tile"><PriceOdometerGraph listings={results} /></div>
                   <div className="graph-tile"><OdometerTimeGraph listings={results} /></div>
-                  <div className="graph-tile placeholder"><p>More to come...</p></div>
+                  <div className="graph-tile">
+                    <VolumeGraph volumeData={{
+                      "Listings Posted": [130, 990],
+                      "Cars Sold": [100, 870],
+                      "Scams Flagged": [12, 104],
+                      "Expired Listings": [18, 103]
+                    }} />
+                  </div>
                 </div>
 
                 <h2>Source Data</h2>
