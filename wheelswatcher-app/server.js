@@ -139,6 +139,67 @@ app.post('/api/sold-parameterized', async (req, res) => {
   }
 });
 
+
+app.post('/api/volume-stats', async (req, res) => {
+  const { make, model, startYear, endYear } = req.body;
+
+  try {
+    const baseConditions = `
+      make = $1 AND model = $2 AND CAST(year AS INTEGER) BETWEEN $3 AND $4
+    `;
+    const values = [make, model, startYear, endYear];
+
+    const query = `
+      SELECT
+        COUNT(*) FILTER (
+          WHERE added::timestamp >= NOW() - INTERVAL '60 days'
+        ) AS posted_60,
+        COUNT(*) FILTER (
+          WHERE added::timestamp >= NOW() - INTERVAL '365 days'
+        ) AS posted_365,
+
+        COUNT(*) FILTER (
+          WHERE activity = 'removed by author' AND updated::timestamp >= NOW() - INTERVAL '60 days'
+        ) AS sold_60,
+        COUNT(*) FILTER (
+          WHERE activity = 'removed by author' AND updated::timestamp >= NOW() - INTERVAL '365 days'
+        ) AS sold_365,
+
+        COUNT(*) FILTER (
+          WHERE activity = 'listing flagged' AND updated::timestamp >= NOW() - INTERVAL '60 days'
+        ) AS flagged_60,
+        COUNT(*) FILTER (
+          WHERE activity = 'listing flagged' AND updated::timestamp >= NOW() - INTERVAL '365 days'
+        ) AS flagged_365,
+
+        COUNT(*) FILTER (
+          WHERE activity = 'expired' AND updated::timestamp >= NOW() - INTERVAL '60 days'
+        ) AS expired_60,
+        COUNT(*) FILTER (
+          WHERE activity = 'expired' AND updated::timestamp >= NOW() - INTERVAL '365 days'
+        ) AS expired_365
+
+      FROM listings
+      WHERE ${baseConditions};
+    `;
+
+    const result = await pool.query(query, values);
+    const row = result.rows[0];
+
+    res.json({
+      "Listings Posted": [parseInt(row.posted_60), parseInt(row.posted_365)],
+      "Cars Sold": [parseInt(row.sold_60), parseInt(row.sold_365)],
+      "Scams Flagged": [parseInt(row.flagged_60), parseInt(row.flagged_365)],
+      "Expired Listings": [parseInt(row.expired_60), parseInt(row.expired_365)]
+    });
+
+  } catch (err) {
+    console.error('Error fetching volume stats:', err);
+    res.status(500).json({ error: 'Failed to fetch volume data' });
+  }
+});
+
+
 // Health check endpoint
 app.get('/api/health-check', (req, res) => {
   res.status(200).send('API is healthy');
