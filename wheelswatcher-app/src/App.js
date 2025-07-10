@@ -123,11 +123,13 @@ function App() {
             <input type="password" value={access_code} onChange={(e) => setAccessCode(e.target.value)} />
           </label>
           <button type="submit">Submit</button>
+
+          <button type="button" onClick={() => setShowAbout(!showAbout)}>
+            {showAbout ? 'Back to Dashboard' : 'About'}
+          </button>
+          
         </form>
 
-        <button type="button" className="form-button full-width" onClick={() => setShowAbout(!showAbout)}>
-          {showAbout ? 'Back to Dashboard' : 'About'}
-        </button>
 
       </aside>
 
