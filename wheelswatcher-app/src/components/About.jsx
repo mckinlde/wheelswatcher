@@ -4,35 +4,24 @@ export const AboutPage = () => {
   return (
     <div className="container p-4 text-left">
       <header className="App-header mb-6">
-        <p>
-          Contact:{' '}
-          <a
-            className="App-link underline"
-            href="mailto:cadocary@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            cadocary@gmail.com
-          </a>
-        </p>
-
         <div className="intro-box my-4">
           <p>
-            Welcome to <strong>CarSaleSignal</strong>; where I try to give small dealerships
+            <strong>CarSaleSignal:</strong> the automotive MLS that gives small dealerships
             and individual buyers an unfair information advantage over big players like KBB and Penske.
           </p>
         </div>
 
         <h2 className="text-xl font-semibold mt-6">What is it</h2>
+        <br />
         <p>
           CarSaleSignal is a database of all the used car listings in America that get taken down
           and marked as sold by the author of the listing.
         </p>
 
         <h2 className="text-xl font-semibold mt-6">How does it work</h2>
+        <br />
         <p>
-          CarSaleSignal works from a distributed system of computers in the cloud (fancy words
-          because I use this on my resume; it's just this:
+          CarSaleSignal works from a distributed system of computers in the cloud:
         </p>
 
         <div className="text-center my-4">
@@ -44,8 +33,12 @@ export const AboutPage = () => {
         </div>
 
         <p>
-          running on a bunch of copies that I rent from Jeff Bezos.)
-          <br />
+          (fancy words because I use this on my resume; it's just this running on a bunch of copies that I rent from Jeff Bezos.)
+        </p>
+
+        <br />
+
+        <p>
           Collectively, they read all of Craigslist every night. When a new listing is posted, it
           gets saved to the database along with the time it was posted. When a listing gets removed
           by the seller (without expiring or being flagged as a scam), the database gets updated
@@ -53,6 +46,7 @@ export const AboutPage = () => {
         </p>
 
         <h2 className="text-xl font-semibold mt-6">Why bother?</h2>
+        <br />
         <p>
           Because trying to figure out whether or not something is a good deal is frustrating!
           Trade-in values all suck, and nobody trusts KBB — with good reason. We all took 6th grade
@@ -62,14 +56,13 @@ export const AboutPage = () => {
           That's why I built CarSaleSignal — to show you the data, so you can make your own informed
           decisions.
         </p>
-
-        <h2 className="text-xl font-semibold mt-6">Can I try it?</h2>
-        <p>
-          Sure, use the form below with your access code. Keep in mind that by "Days Listed", we
-          mean the length of time between the listing being posted and the listing being removed by
-          the seller. We exclude listings that say they expired or were flagged.
-        </p>
       </header>
+
+      <footer style={{ marginTop: '2rem' }}>
+        <p>
+          Contact: <a className="App-link" href="mailto:cadocary@gmail.com">cadocary@gmail.com</a>
+        </p>
+      </footer>
     </div>
   );
 };
