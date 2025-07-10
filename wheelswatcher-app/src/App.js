@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import { PriceDurationGraph, OdometerTimeGraph, PriceOdometerGraph } from './2dGraphs';
-import { AboutPage } from './components/about'; // 🆕 Import About component
+import { AboutPage } from './components/About'; // 🆕
 
 function App() {
   const [access_code, setAccessCode] = useState('');
@@ -26,7 +26,7 @@ function App() {
 
   const fetchUnsoldCars = async (make, model, startYear, endYear, bodyTermsArray) => {
     try {
-      const response = await axios.post('https://carsalesignal.com/api/unsold-parameterized', {
+      await axios.post('https://carsalesignal.com/api/unsold-parameterized', {
         make, model, startYear, endYear, bodyTerms: bodyTermsArray
       });
     } catch (error) {
@@ -92,7 +92,7 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        <button className="about-toggle" onClick={() => setShowAbout(!showAbout)}>
+        <button type="button" className="submit-button" onClick={() => setShowAbout(!showAbout)}>
           {showAbout ? 'Back to Dashboard' : 'About'}
         </button>
       </aside>
@@ -104,7 +104,7 @@ function App() {
           <>
             <div className="intro-box">
               <p>
-                Welcome to CarSaleSignal: The automotive MLS built to give small dealerships and individual buyers an unfair information advantage.
+                <strong>CarSaleSignal:</strong> the automotive MLS that gives small dealerships and individual buyers an unfair information advantage over big players like KBB and Penske.
               </p>
             </div>
 
