@@ -112,7 +112,7 @@ function App() {
           <button type="submit">Submit</button>
         </form>
 
-        <button type="button" className="submit-button" onClick={() => setShowAbout(!showAbout)}>
+        <button type="button" className="form-button" onClick={() => setShowAbout(!showAbout)}>
           {showAbout ? 'Back to Dashboard' : 'About'}
         </button>
       </aside>
